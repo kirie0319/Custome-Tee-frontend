@@ -1,7 +1,7 @@
 # app/utils/dynamodb.py
 import boto3
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
@@ -66,8 +66,8 @@ class DynamoDBClient:
 
     def store_design_request(self, request_id, user_id, prompt):
         table = self.dynamodb.Table('DesignRequests')
-        timestamp = int(datetime.utcnow().timestamp())
-        expiration_time = int((datetime.utcnow() + timedelta(days=1)).timestamp())
+        timestamp = int(datetime.now(timezone.utc).timestamp())
+        expiration_time = int((datetime.now(timezone.utc) + timedelta(days=1)).timestamp())
         
         try:
             response = table.put_item(
@@ -87,8 +87,8 @@ class DynamoDBClient:
 
     def cache_design(self, design_id, image_url):
         table = self.dynamodb.Table('DesignCache')
-        timestamp = int(datetime.utcnow().timestamp())
-        expiration_time = int((datetime.utcnow() + timedelta(days=7)).timestamp())
+        timestamp = int(datetime.now(timezone.utc).timestamp())
+        expiration_time = int((datetime.now(timezone.utc) + timedelta(days=7)).timestamp())
         
         try:
             response = table.put_item(

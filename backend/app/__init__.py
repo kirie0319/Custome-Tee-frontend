@@ -6,7 +6,6 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from config import Config
 
-# データベースとその他の拡張機能の初期化
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
@@ -15,22 +14,22 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     
-    # 拡張機能の初期化
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
     CORS(app)
     
-    # モデルのインポート
-    from app.models.user import User
-    from app.models.design import Design
-    from app.models.order import Order, CartItem
-    
-    # Blueprintの登録
+    # Register blueprints
     from app.api.auth import bp as auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    from app.api.designs import bp as designs_bp
+    from app.api.cart import bp as cart_bp
     
-    # エラーハンドリング
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(designs_bp, url_prefix='/api/designs')
+    app.register_blueprint(cart_bp, url_prefix='/api/cart')
+    
+    # Error handlers
     @app.errorhandler(400)
     def bad_request_error(error):
         return jsonify({'error': 'Bad request'}), 400
