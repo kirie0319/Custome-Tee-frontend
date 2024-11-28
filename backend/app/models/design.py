@@ -14,3 +14,24 @@ class Design(db.Model):
     position_y = db.Column(db.Float, default=0)
     scale = db.Column(db.Float, default=1.0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        """
+        モデルを辞書に変換するメソッド
+        Returns:
+            dict: デザインの情報を含む辞書
+        """
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'prompt': self.prompt,
+            'image_url': self.image_url,
+            's3_key': self.s3_key,
+            'position_x': self.position_x,
+            'position_y': self.position_y,
+            'scale': self.scale,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+    def __repr__(self):
+        return f'<Design {self.id}>'

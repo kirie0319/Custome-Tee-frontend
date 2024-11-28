@@ -3,6 +3,7 @@ from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
+from app import db  # dbをインポート
 from app.models.user import User
 from app.api.auth import bp
 
@@ -11,6 +12,7 @@ from app.api.auth import bp
 def register():
     try:
         data = request.get_json()
+        print("Received registration data:", data)  # デバッグ用
 
         # 必要なフィールドの確認
         required_fields = ['username', 'email', 'password']
@@ -31,6 +33,10 @@ def register():
             email=data['email']
         )
         user.set_password(data['password'])
+
+        # デフォルトの配送情報があれば設定
+        if 'default_shipping_info' in data and data['default_shipping_info']:
+            user.default_shipping_info = data['default_shipping_info']
 
         # 最初のユーザーを管理者に設定
         if User.query.count() == 0:
@@ -54,6 +60,7 @@ def register():
         }), 201
 
     except Exception as e:
+        print(f"Registration error: {str(e)}")  # デバッグ用
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
@@ -83,6 +90,7 @@ def login():
         return jsonify({'error': 'Invalid username or password'}), 401
 
     except Exception as e:
+        print(f"Login error: {str(e)}")  # デバッグ用
         return jsonify({'error': str(e)}), 500
 
 # ユーザープロフィール取得
@@ -97,25 +105,6 @@ def get_user_profile():
             return jsonify({'error': 'User not found'}), 404
 
         return jsonify(user.to_dict()), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# 管理者用：全ユーザー一覧取得
-@bp.route('/admin/users', methods=['GET'])
-@jwt_required()
-def get_all_users():
-    try:
-        current_user_id = get_jwt_identity()
-        current_user = User.query.get(current_user_id)
-
-        if not current_user or not current_user.is_admin:
-            return jsonify({'error': 'Unauthorized access'}), 403
-
-        users = User.query.all()
-        return jsonify({
-            'users': [user.to_dict() for user in users]
-        }), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

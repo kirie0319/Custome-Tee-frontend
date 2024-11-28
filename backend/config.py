@@ -20,3 +20,28 @@ class Config:
     
     # CORS config
     CORS_HEADERS = 'Content-Type'
+
+    # メール設定
+    MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY')
+    MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+    
+    # アプリケーション設定
+    FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+
+    # AWS S3設定
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_REGION = os.getenv('AWS_REGION', 'ap-northeast-1')
+    S3_BUCKET = os.getenv('S3_BUCKET')
+
+    # Stripe設定
+    STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+    STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+    STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # インメモリデータベースを使用
+    WTF_CSRF_ENABLED = False
