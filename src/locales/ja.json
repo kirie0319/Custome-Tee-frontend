@@ -1,0 +1,176 @@
+{
+  "home": {
+    "title": "CustomAI Tee",
+    "dashboard": "ダッシュボード",
+    "createDesign": "デザインを作成",
+    "createDesignDesc": "AIで独自のTシャツデザインを作成します",
+    "createDesignButton": "作成開始",
+    "myDesigns": "マイデザイン",
+    "myDesignsDesc": "デザインを表示および管理",
+    "myDesignsButton": "デザインを見る",
+    "orders": "注文履歴",
+    "ordersDesc": "注文の履歴を確認",
+    "ordersButton": "履歴を見る",
+    "cart": "カート",
+    "cartDesc": "カート内のアイテムを確認・編集",
+    "cartButton": "カートを見る",
+    "welcome": "CustomAI Teeへようこそ",
+    "subtitle": "AIでユニークなTシャツデザインを作成",
+    "getStarted": "はじめる"
+  },
+  "common": {
+    "welcome": "ようこそ",
+    "login": "ログイン",
+    "register": "新規登録",
+    "logout": "ログアウト",
+    "cart": "カート",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "edit": "編集",
+    "remove": "削除",
+    "back": "戻る",
+    "loading": "読み込み中...",
+    "processing": "処理中..."
+  },
+  "createDesign": {
+    "title": "デザインを作成",
+    "describeDesign": "デザインの説明",
+    "placeholder": "例: 夕暮れの山々を現代的でミニマルなスタイルで",
+    "generating": "生成中...",
+    "generate": "デザインを生成",
+    "preview": "プレビュー",
+    "originalDesign": "オリジナルデザイン",
+    "orderOptions": "注文オプション",
+    "size": "サイズ",
+    "color": "カラー",
+    "addToCart": "カートに追加"
+  },
+  "cart": {
+    "title": "ショッピングカート",
+    "empty": "カートは空です",
+    "backToDesign": "デザインを作成する",
+    "editDesign": "デザインを編集",
+    "remove": "削除",
+    "quantity": "数量",
+    "total": "合計",
+    "checkout": "レジに進む",
+    "processing": "処理中..."
+  },
+  "tshirtEdit": {
+    "position": {
+      "title": "位置調整",
+      "horizontal": "左右位置調整",
+      "vertical": "上下位置調整"
+    },
+    "size": "デザインサイズ",
+    "rotation": "回転",
+    "reset": "デザインをリセット"
+  },
+  "login": {
+    "title": "アカウントにサインイン",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "submit": "サインイン",
+    "registerLink": "アカウントをお持ちでない方はこちら",
+    "error": {
+      "invalid": "ユーザー名またはパスワードが違います",
+      "general": "エラーが発生しました。もう一度お試しください。"
+    }
+  },
+  "checkout": {
+    "title": "ご注文手続き",
+    "orderSummary": "注文内容",
+    "shippingInfo": "配送先情報",
+    "form": {
+      "name": "お名前",
+      "address": "住所",
+      "city": "市区町村",
+      "postalCode": "郵便番号",
+      "postalCodeFormat": "郵便番号は xxx-xxxx の形式で入力してください",
+      "country": "国"
+    },
+    "confirmOrder": "注文を確定する",
+    "errors": {
+      "invalidPayment": "無効な決済セッションです。もう一度お試しください。",
+      "processingFailed": "決済処理に失敗しました。もう一度お試しください。"
+    }
+  },
+  "cart_edit": {
+    "title": "デザインの編集",
+    "backToCart": "カートに戻る",
+    "productDetails": "商品詳細",
+    "saveChanges": "変更を保存",
+    "size": "サイズ",
+    "quantity": "数量",
+    "color": "カラー",
+    "price": "価格",
+    "actions": {
+      "saving": "保存中...",
+      "save": "変更を保存",
+      "cancel": "キャンセル"
+    },
+    "sizes": {
+      "small": "S (小)",
+      "medium": "M (中)",
+      "large": "L (大)",
+      "extraLarge": "XL (特大)"
+    }
+  },
+  "register": {
+    "title": "アカウント登録",
+    "basicInfo": {
+      "title": "基本情報",
+      "username": "ユーザー名",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "confirmPassword": "パスワード（確認）",
+      "required": "必須"
+    },
+    "shipping": {
+      "title": "配送先情報（任意）",
+      "name": "氏名",
+      "address": "住所",
+      "city": "市区町村",
+      "postalCode": "郵便番号",
+      "country": "国"
+    },
+    "submit": {
+      "loading": "登録処理中...",
+      "default": "アカウントを作成"
+    },
+    "validation": {
+      "required": "この項目は必須です",
+      "minLength": "{n}文字以上で入力してください",
+      "email": "有効なメールアドレスを入力してください",
+      "passwordMatch": "パスワードが一致しません",
+      "formError": "入力内容に誤りがあります",
+      "username": {
+        "exists": "このユーザー名は既に使用されています",
+        "invalid": "ユーザー名は半角英数字のみ使用できます"
+      },
+      "email": {
+        "exists": "このメールアドレスは既に登録されています",
+        "invalid": "有効なメールアドレスを入力してください"
+      },
+      "password": {
+        "weak": "より強力なパスワードを設定してください",
+        "requirements": "パスワードは8文字以上で、英字・数字を含める必要があります"
+      }
+    },
+    "error": {
+      "default": "登録に失敗しました。もう一度お試しください",
+      "network": "ネットワークエラーが発生しました",
+      "server": "サーバーエラーが発生しました",
+      "unknown": "予期せぬエラーが発生しました"
+    },
+    "login": {
+      "text": "すでにアカウントをお持ちの方は",
+      "link": "こちらからログイン"
+    },
+    "success": {
+      "title": "登録完了",
+      "message": "アカウントの作成が完了しました",
+      "login": "ログイン画面へ"
+    }
+  }
+}

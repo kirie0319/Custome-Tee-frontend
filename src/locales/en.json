@@ -1,0 +1,176 @@
+{
+  "home": {
+    "title": "CustomAI Tee",
+    "dashboard": "Dashboard",
+    "createDesign": "Create Design",
+    "createDesignDesc": "Create unique T-shirt designs with AI",
+    "createDesignButton": "Start Creating",
+    "myDesigns": "My Designs",
+    "myDesignsDesc": "View and manage your designs",
+    "myDesignsButton": "View Designs",
+    "orders": "Order History",
+    "ordersDesc": "Check your order history",
+    "ordersButton": "View History",
+    "cart": "Cart",
+    "cartDesc": "Review and edit items in your cart",
+    "cartButton": "View Cart",
+    "welcome": "Welcome to CustomAI Tee",
+    "subtitle": "Create unique T-shirt designs with AI",
+    "getStarted": "Get Started"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "cart": "Cart",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "remove": "Remove",
+    "back": "Back",
+    "loading": "Loading...",
+    "processing": "Processing..."
+  },
+  "createDesign": {
+    "title": "Create Design",
+    "describeDesign": "Describe Your Design",
+    "placeholder": "e.g., Modern and minimal style of mountains at sunset",
+    "generating": "Generating...",
+    "generate": "Generate Design",
+    "preview": "Preview",
+    "originalDesign": "Original Design",
+    "orderOptions": "Order Options",
+    "size": "Size",
+    "color": "Color",
+    "addToCart": "Add to Cart"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "backToDesign": "Create a Design",
+    "editDesign": "Edit Design",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "processing": "Processing..."
+  },
+  "tshirtEdit": {
+    "position": {
+      "title": "Position Adjustment",
+      "horizontal": "Horizontal Position",
+      "vertical": "Vertical Position"
+    },
+    "size": "Design Size",
+    "rotation": "Rotation",
+    "reset": "Reset Design"
+  },
+  "login": {
+    "title": "Sign In to Your Account",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign In",
+    "registerLink": "Don't have an account? Register here",
+    "error": {
+      "invalid": "Invalid username or password",
+      "general": "An error occurred. Please try again."
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "orderSummary": "Order Summary",
+    "shippingInfo": "Shipping Information",
+    "form": {
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "postalCodeFormat": "Postal code must be in the format xxx-xxxx",
+      "country": "Country"
+    },
+    "confirmOrder": "Confirm Order",
+    "errors": {
+      "invalidPayment": "Invalid payment session. Please try again.",
+      "processingFailed": "Payment processing failed. Please try again."
+    }
+  },
+  "cart_edit": {
+    "title": "Edit Design",
+    "backToCart": "Back to Cart",
+    "productDetails": "Product Details",
+    "saveChanges": "Save Changes",
+    "size": "Size",
+    "quantity": "Quantity",
+    "color": "Color",
+    "price": "Price",
+    "actions": {
+      "saving": "Saving...",
+      "save": "Save Changes",
+      "cancel": "Cancel"
+    },
+    "sizes": {
+      "small": "S (Small)",
+      "medium": "M (Medium)",
+      "large": "L (Large)",
+      "extraLarge": "XL (Extra Large)"
+    }
+  },
+  "register": {
+    "title": "Register Account",
+    "basicInfo": {
+      "title": "Basic Information",
+      "username": "Username",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "required": "Required"
+    },
+    "shipping": {
+      "title": "Shipping Information (Optional)",
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "country": "Country"
+    },
+    "submit": {
+      "loading": "Processing Registration...",
+      "default": "Create Account"
+    },
+    "validation": {
+      "required": "This field is required",
+      "minLength": "Please enter at least {n} characters",
+      "email": "Please enter a valid email address",
+      "passwordMatch": "Passwords do not match",
+      "formError": "There are errors in the form",
+      "username": {
+        "exists": "This username is already taken",
+        "invalid": "Username can only contain alphanumeric characters"
+      },
+      "email": {
+        "exists": "This email address is already registered",
+        "invalid": "Please enter a valid email address"
+      },
+      "password": {
+        "weak": "Please choose a stronger password",
+        "requirements": "Password must be at least 8 characters and include letters and numbers"
+      }
+    },
+    "error": {
+      "default": "Registration failed. Please try again.",
+      "network": "A network error occurred",
+      "server": "A server error occurred",
+      "unknown": "An unexpected error occurred"
+    },
+    "login": {
+      "text": "Already have an account?",
+      "link": "Sign in here"
+    },
+    "success": {
+      "title": "Registration Complete",
+      "message": "Your account has been successfully created",
+      "login": "Go to Login Page"
+    }
+  }
+}
