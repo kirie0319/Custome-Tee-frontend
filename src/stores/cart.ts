@@ -2,19 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useAuthStore } from './auth'
-
-interface CartItem {
-  id: number
-  design: {
-    id: number
-    image_url: string
-    prompt: string
-  }
-  quantity: number
-  size: string
-  color: string
-  design_config: any
-}
+import type { CartItem, CartItemInput, GenerateDesignResponse } from '@/types/cart'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -24,12 +12,93 @@ export const useCartStore = defineStore('cart', {
   }),
 
   actions: {
-    // 個別のカートアイテムを取得
-    async getCartItem(itemId: number) {
+    // デザイン生成
+    async generateDesign(prompt: string): Promise<GenerateDesignResponse> {
       const authStore = useAuthStore()
       this.loading = true
       this.error = null
       
+      try {
+        const response = await axios.post<GenerateDesignResponse>(
+          'http://localhost:5000/api/designs/generate',
+          { prompt },
+          {
+            headers: { 
+              Authorization: `Bearer ${authStore.token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+        return response.data
+      } catch (error) {
+        this.error = 'Failed to generate design'
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // カートに追加
+    async addToCart(data: CartItemInput) {
+      const authStore = useAuthStore()
+      this.loading = true
+      this.error = null
+      
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/cart/add',
+          {
+            ...data,
+            quantity: data.quantity || 1
+          },
+          {
+            headers: { 
+              Authorization: `Bearer ${authStore.token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+        await this.fetchCartItems()
+        return response.data
+      } catch (error) {
+        this.error = 'Failed to add to cart'
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+    // src/stores/cart.ts に以下のactionを追加
+    async confirmPayment(paymentIntentId: string, shippingAddress: any) {
+      const authStore = useAuthStore()
+      this.loading = true
+      this.error = null
+
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/payment/confirm-payment',
+          {
+            payment_intent_id: paymentIntentId,
+            shipping_address: shippingAddress
+          },
+          {
+            headers: { Authorization: `Bearer ${authStore.token}` }
+          }
+        )
+        return response.data
+      } catch (error) {
+        this.error = 'Failed to confirm payment'
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // カートアイテムを取得
+    async getCartItem(itemId: number) {
+      const authStore = useAuthStore()
+      this.loading = true
+      this.error = null
+
       try {
         const response = await axios.get(
           `http://localhost:5000/api/cart/items/${itemId}`,
@@ -40,7 +109,6 @@ export const useCartStore = defineStore('cart', {
         return response.data
       } catch (error) {
         this.error = 'Failed to fetch cart item'
-        console.error(error)
         throw error
       } finally {
         this.loading = false
@@ -48,24 +116,48 @@ export const useCartStore = defineStore('cart', {
     },
 
     // カートアイテムを更新
-    async updateCartItem(itemId: number, updateData: any) {
+    async updateCartItem(itemId: number, updateData: Partial<CartItemInput>) {
       const authStore = useAuthStore()
       this.loading = true
       this.error = null
-      
+
       try {
         const response = await axios.put(
           `http://localhost:5000/api/cart/items/${itemId}`,
           updateData,
           {
-            headers: { Authorization: `Bearer ${authStore.token}` }
+            headers: { 
+              Authorization: `Bearer ${authStore.token}`,
+              'Content-Type': 'application/json'
+            }
           }
         )
         await this.fetchCartItems()
         return response.data
       } catch (error) {
         this.error = 'Failed to update cart item'
-        console.error(error)
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // カートアイテムを削除
+    async removeItem(itemId: number) {
+      const authStore = useAuthStore()
+      this.loading = true
+      this.error = null
+
+      try {
+        await axios.delete(
+          `http://localhost:5000/api/cart/items/${itemId}`,
+          {
+            headers: { Authorization: `Bearer ${authStore.token}` }
+          }
+        )
+        await this.fetchCartItems()
+      } catch (error) {
+        this.error = 'Failed to remove item from cart'
         throw error
       } finally {
         this.loading = false
@@ -77,7 +169,7 @@ export const useCartStore = defineStore('cart', {
       const authStore = useAuthStore()
       this.loading = true
       this.error = null
-      
+
       try {
         const response = await axios.get('http://localhost:5000/api/cart/items', {
           headers: { Authorization: `Bearer ${authStore.token}` }
@@ -85,7 +177,30 @@ export const useCartStore = defineStore('cart', {
         this.items = response.data.cart_items
       } catch (error) {
         this.error = 'Failed to fetch cart items'
-        console.error(error)
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // チェックアウトプロセスを開始
+    async initCheckout() {
+      const authStore = useAuthStore()
+      this.loading = true
+      this.error = null
+
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/payment/create-payment',
+          {},
+          {
+            headers: { Authorization: `Bearer ${authStore.token}` }
+          }
+        )
+        return response.data
+      } catch (error) {
+        this.error = 'Failed to initialize checkout'
+        throw error
       } finally {
         this.loading = false
       }

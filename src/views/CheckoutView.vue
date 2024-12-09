@@ -1,202 +1,163 @@
 <!-- src/views/CheckoutView.vue -->
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
-    <div class="max-w-2xl mx-auto">
-      <h1 class="text-3xl font-bold mb-8">{{ $t('checkout.title') }}</h1>
+ <div class="min-h-screen bg-gray-100 pb-20">
+   <!-- ヘッダー -->
+   <header class="bg-white p-4 shadow-sm">
+     <div class="flex items-center">
+       <button @click="router.push('/cart')" class="p-2 -ml-2">
+         <ChevronLeft class="h-6 w-6" />
+       </button>
+       <h1 class="text-xl font-bold flex-1 text-center">チェックアウト</h1>
+       <div class="w-10"></div>
+     </div>
+   </header>
 
-      <!-- 注文サマリー -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 class="text-xl font-semibold mb-4">{{ $t('checkout.orderSummary') }}</h2>
-        <div class="flex justify-between mb-4">
-          <span>{{ $t('cart.total') }}</span>
-          <span class="font-semibold">¥{{ amount }}</span>
-        </div>
-      </div>
+   <!-- メインコンテンツ -->
+   <main class="p-4 space-y-4">
+     <!-- お届け先 -->
+     <div class="bg-white rounded-lg shadow p-4">
+       <div class="flex items-center justify-between mb-4">
+         <div class="flex items-center space-x-2">
+           <MapPin class="w-5 h-5 text-gray-600" />
+           <h2 class="font-bold">お届け先</h2>
+         </div>
+         <button class="text-indigo-600 text-sm">変更</button>
+       </div>
+       <div class="text-sm text-gray-600">
+         〒{{ shippingAddress.postal_code }}<br />
+         {{ shippingAddress.address }}<br />
+         {{ shippingAddress.name }}
+       </div>
+     </div>
 
-      <!-- 配送先情報フォーム -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-4">{{ $t('checkout.shippingInfo') }}</h2>
-        <form @submit.prevent="confirmPayment" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('checkout.form.name') }}
-            </label>
-            <input
-              v-model="shippingAddress.name"
-              type="text"
-              required
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+     <!-- お支払い方法 -->
+     <div class="bg-white rounded-lg shadow p-4">
+       <div class="flex items-center space-x-2 mb-4">
+         <CreditCard class="w-5 h-5 text-gray-600" />
+         <h2 class="font-bold">お支払い方法</h2>
+       </div>
+       
+       <PaymentForm
+         v-if="clientSecret"
+         :client-secret="clientSecret"
+         :shipping-address="shippingAddress"
+         @success="handlePaymentSuccess"
+         @error="handlePaymentError"
+       />
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('checkout.form.address') }}
-            </label>
-            <input
-              v-model="shippingAddress.address"
-              type="text"
-              required
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+       <div v-if="paymentError" class="mt-2 text-sm text-red-600">
+         {{ paymentError }}
+       </div>
+     </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('checkout.form.city') }}
-            </label>
-            <input
-              v-model="shippingAddress.city"
-              type="text"
-              required
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+     <!-- 注文内容 -->
+     <div class="bg-white rounded-lg shadow p-4">
+       <div class="flex items-center space-x-2 mb-4">
+         <Box class="w-5 h-5 text-gray-600" />
+         <h2 class="font-bold">注文内容</h2>
+       </div>
+       <div 
+         v-for="item in cartItems" 
+         :key="item.id" 
+         class="flex justify-between py-2 border-b last:border-none"
+       >
+         <div>
+           <p class="text-sm text-gray-600">AI生成デザイン #{{ item.id }}</p>
+           <div class="mt-1 space-y-1">
+             <p class="text-sm">サイズ: {{ item.size }}</p>
+             <p class="text-sm">カラー: {{ item.color }}</p>
+             <p class="text-sm">数量: {{ item.quantity }}</p>
+           </div>
+         </div>
+         <p class="font-bold">¥{{ item.price * item.quantity }}</p>
+       </div>
+     </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('checkout.form.postalCode') }}
-            </label>
-            <input
-              v-model="shippingAddress.postal_code"
-              type="text"
-              required
-              class="w-full p-2 border border-gray-300 rounded-md"
-              pattern="\d{3}-?\d{4}"
-              title="{{ $t('checkout.form.postalCodeFormat') }}"
-            />
-          </div>
+     <!-- 注文金額 -->
+     <div class="bg-white rounded-lg shadow p-4">
+       <div class="space-y-2">
+         <div class="flex justify-between">
+           <span class="text-gray-600">小計</span>
+           <span>¥{{ subtotal }}</span>
+         </div>
+         <div class="flex justify-between">
+           <span class="text-gray-600">送料</span>
+           <span>¥500</span>
+         </div>
+         <div class="border-t pt-2 flex justify-between font-bold">
+           <span>合計（税込）</span>
+           <span>¥{{ total }}</span>
+         </div>
+       </div>
+     </div>
+   </main>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('checkout.form.country') }}
-            </label>
-            <input
-              v-model="shippingAddress.country"
-              type="text"
-              required
-              class="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <!-- 支払い確認ボタン -->
-          <button
-            type="submit"
-            class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
-            :disabled="isLoading || !isValidPaymentIntent"
-          >
-            {{ isLoading ? $t('common.processing') : $t('checkout.confirmOrder') }}
-          </button>
-        </form>
-      </div>
-
-      <!-- エラーメッセージ -->
-      <div
-        v-if="error"
-        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
-      >
-        {{ $t(`checkout.errors.${error}`) }}
-      </div>
-    </div>
-  </div>
+   <!-- 注文確定ボタン -->
+   <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
+     <button 
+       @click="handleSubmit"
+       class="w-full bg-indigo-600 text-white py-4 rounded-lg font-bold"
+       :disabled="isProcessing"
+     >
+       {{ isProcessing ? '処理中...' : '注文を確定する' }}
+     </button>
+   </div>
+ </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import axios from 'axios'
+import { useRouter } from 'vue-router'
+import { ChevronLeft, MapPin, CreditCard, Box } from 'lucide-vue-next'
+import { useCartStore } from '@/stores/cart'
+import PaymentForm from '@/components/PaymentForm.vue'
 
-const { t } = useI18n()
-const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
+const cartStore = useCartStore()
+const isProcessing = ref(false)
+const clientSecret = ref<string | null>(null)
+const paymentError = ref<string | null>(null)
 
-// State
-const amount = ref(route.query.amount || 0)
-const isLoading = ref(false)
-const error = ref('')
-
-// Payment Intent
-const paymentIntentId = computed(() => route.query.payment_intent as string)
-const isValidPaymentIntent = computed(() => Boolean(paymentIntentId.value))
-
-// Form data
-const shippingAddress = ref({
-  name: '',
-  address: '',
-  city: '',
-  postal_code: '',
-  country: 'Japan'
-})
-
-// Payment confirmation handler
-const confirmPayment = async () => {
-  if (!isValidPaymentIntent.value) {
-    error.value = 'Invalid payment session. Please try again.'
-    return
-  }
-
-  isLoading.value = true
-  error.value = ''
-
-  try {
-    // Debug logging
-    console.log('Auth token:', authStore.token ? 'Present' : 'Missing')
-    
-    const requestData = {
-      payment_intent_id: paymentIntentId.value,
-      shipping_address: shippingAddress.value
-    }
-    
-    console.log('Sending payment confirmation:', requestData)
-
-    // API request
-    const response = await axios.post(
-      'http://localhost:5000/api/payment/confirm-payment',
-      requestData,
-      {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-
-    console.log('Payment confirmation response:', response.data)
-
-    // Redirect to order complete page
-    router.push({
-      name: 'order-complete',
-      params: { orderId: response.data.order_id }
-    })
-  } catch (e: any) {
-    // Enhanced error handling
-    console.error('Payment error:', {
-      status: e.response?.status,
-      data: e.response?.data,
-      message: e.message
-    })
-    
-    error.value = e.response?.data?.error || 
-                  'Failed to process payment. Please try again.'
-  } finally {
-    isLoading.value = false
-  }
+// 配送先情報
+const shippingAddress = {
+ name: '山田 太郎',
+ postal_code: '150-0001',
+ address: '東京都渋谷区神宮前1-1-1',
+ city: '渋谷区'
 }
 
-// Initialization
-onMounted(() => {
-  console.log('CheckoutView mounted', {
-    amount: amount.value,
-    paymentIntentId: paymentIntentId.value,
-    token: authStore.token ? 'Present' : 'Missing'
-  })
+const cartItems = computed(() => cartStore.items)
+const subtotal = computed(() => 
+ cartItems.value.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+)
+const total = computed(() => subtotal.value + 500)
 
-  if (!isValidPaymentIntent.value) {
-    error.value = 'Invalid payment session. Please try again.'
-    console.error('No payment_intent_id found in URL')
-  }
+onMounted(async () => {
+ try {
+   const { client_secret } = await cartStore.initCheckout()
+   clientSecret.value = client_secret
+ } catch (error) {
+   paymentError.value = '決済の初期化に失敗しました'
+ }
 })
+
+const handlePaymentSuccess = async (orderId: string) => {
+ await router.push(`/order-complete/${orderId}`)
+}
+
+const handlePaymentError = (error: string) => {
+ paymentError.value = error
+}
+
+const handleSubmit = async () => {
+ isProcessing.value = true
+ try {
+   const { client_secret } = await cartStore.initCheckout()
+   clientSecret.value = client_secret
+ } catch (error) {
+   paymentError.value = '決済の初期化に失敗しました'
+ } finally {
+   isProcessing.value = false
+ }
+}
 </script>

@@ -2,7 +2,8 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <router-view />
-    <MobileFooter v-if="shouldShowFooter" />
+    <!-- <MobileFooter v-if="shouldShowFooter" /> -->
+    <MobileFooter v-if="shouldShowFooter && authStore.isAuthenticated"/>
   </div>
 </template>
 
@@ -10,18 +11,15 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import MobileFooter from '@/components/MobileFooter.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 
-// フッターを非表示にするルートのリスト
-const footerExcludedRoutes = [
-  '/checkout',
-  '/onboarding',
-  '/login',
-  '/register'
-]
+const footerExcludedRouteNames = ['checkout', 'onboarding', 'login', 'register', 'cart-item-edit', 'admin-orders']
 
-const shouldShowFooter = computed(() => 
-  !footerExcludedRoutes.some(path => route.path.startsWith(path))
-)
+const shouldShowFooter = computed(() => !footerExcludedRouteNames.includes(route.name as string))
+
+
+const authStore = useAuthStore()
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 </script>

@@ -21,3 +21,5 @@ export interface DesignConfig {
     image_url: string
     prompt: string
   }
+
+  

@@ -48,6 +48,11 @@ const router = createRouter({
       component: () => import('@/views/OrderCompleteView.vue')
     },
     {
+      path: '/admin-login',
+      name: 'admin-login',
+      component: () => import('@/views/AdminLoginView.vue'),
+    },
+    {
       path: '/admin',
       component: () => import('@/views/AdminLayout.vue'),
       meta: { requiresAuth: true, requiresAdmin: true },
@@ -66,7 +71,13 @@ const router = createRouter({
           path: 'users',
           name: 'admin-users',
           component: () => import('@/views/AdminUsers.vue')
+        },
+        {
+          path: '/orders/:id',
+          name: 'AdminOrderDetail',
+          component: () => import('@/views/AdminOrderDetail.vue')
         }
+        
       ]
     }
   ]

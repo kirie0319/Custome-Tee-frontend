@@ -14,44 +14,45 @@
 
       <!-- Cart Button -->
       <router-link 
-        to="/cart" 
+        to="/cart"
         class="flex flex-col items-center min-w-[48px] min-h-[48px] pt-2"
         :class="{ 'text-indigo-600': $route.path.includes('cart') }"
+        @click.native="handleCartClick"
       >
         <ShoppingCartIcon class="h-6 w-6" />
         <span class="text-xs mt-1">Cart</span>
       </router-link>
 
       <!-- My Page Button -->
-      <router-link 
+      <!-- <router-link 
         to="/my-page" 
         class="flex flex-col items-center min-w-[48px] min-h-[48px] pt-2"
         :class="{ 'text-indigo-600': $route.path.includes('my-page') }"
       >
         <UserIcon class="h-6 w-6" />
         <span class="text-xs mt-1">My Page</span>
-      </router-link>
+      </router-link> -->
 
       <!-- Menu Button -->
-      <button 
+      <!-- <button 
         @click="toggleMenu"
         class="flex flex-col items-center min-w-[48px] min-h-[48px] pt-2"
         :class="{ 'text-indigo-600': isMenuOpen }"
       >
         <MenuIcon class="h-6 w-6" />
         <span class="text-xs mt-1">Menu</span>
-      </button>
+      </button> -->
     </div>
 
     <!-- Menu Overlay -->
-    <div 
+    <!-- <div 
       v-if="isMenuOpen"
       class="fixed inset-0 bg-black bg-opacity-50"
       @click="isMenuOpen = false"
-    />
+    /> -->
 
     <!-- Menu Content -->
-    <div 
+    <!-- <div 
       v-if="isMenuOpen"
       class="fixed bottom-16 left-0 right-0 bg-white rounded-t-lg shadow-lg p-4"
     >
@@ -66,13 +67,14 @@
           {{ item.label }}
         </router-link>
       </div>
-    </div>
+    </div> -->
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { HomeIcon, ShoppingCartIcon, UserIcon, MenuIcon } from 'lucide-react'
+import { HomeIcon, ShoppingCartIcon, UserIcon, MenuIcon } from 'lucide-vue-next'
+import { useCartStore } from '@/stores/cart'
 
 const isMenuOpen = ref(false)
 const menuItems = [
@@ -85,6 +87,12 @@ const menuItems = [
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+}
+
+const cartStore = useCartStore()
+
+const handleCartClick = async () => {
+  await cartStore.fetchCartItems()
 }
 </script>
 

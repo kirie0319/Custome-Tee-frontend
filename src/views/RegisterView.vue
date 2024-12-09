@@ -79,24 +79,6 @@
             </div>
           </div>
 
-          <!-- 配送情報 -->
-          <div class="space-y-4">
-            <h2 class="text-xl font-semibold mb-4">{{ $t('register.shipping.title') }}</h2>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                {{ $t('register.shipping.name') }}
-              </label>
-              <input
-                v-model="form.shipping.name"
-                type="text"
-                class="w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            <!-- 他の配送情報フィールドも同様に修正... -->
-          </div>
-
           <!-- 登録ボタン -->
           <button
             type="submit"

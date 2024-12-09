@@ -78,7 +78,7 @@
                 #{{ order.id }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                {{ order.user?.email }}
+                {{ order.items }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 {{ order.items_count }} items
@@ -111,6 +111,13 @@
           </tbody>
         </table>
       </div>
+      <!-- <div>
+        <h1>Order #{{ order.id }}</h1>
+        <div v-for="item in order.items" :key="item.id">
+          <p>Design: {{ item.design.prompt }}</p>
+          <img :src="item.design.image_url" alt="Design Preview" />
+        </div>
+      </div> -->
 
       <!-- ページネーション -->
       <div class="mt-4 flex justify-between items-center">
@@ -137,51 +144,82 @@
     </div>
 
     <!-- 注文詳細モーダル -->
-    <div v-if="selectedOrder" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-        <div class="flex justify-between items-start">
-          <h2 class="text-xl font-bold">Order Details #{{ selectedOrder.id }}</h2>
-          <button @click="selectedOrder = null" class="text-gray-400 hover:text-gray-500">
-            <span class="sr-only">Close</span>
-            ×
-          </button>
+<div v-if="selectedOrder" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center overflow-y-auto">
+  <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 my-8 relative">
+    <!-- ヘッダー部分 -->
+    <div class="flex justify-between items-start mb-4">
+      <h2 class="text-xl font-bold">Order Details #{{ selectedOrder.id }}</h2>
+      <button 
+        @click="selectedOrder = null" 
+        class="text-gray-400 hover:text-gray-500 text-2xl"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- スクロール可能なコンテンツエリア -->
+    <div class="max-h-[70vh] overflow-y-auto pr-2">
+      <!-- 顧客情報と配送先情報 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-gray-50 p-4 rounded">
+          <h3 class="font-semibold text-gray-700 mb-2">Customer Information</h3>
+          <p>{{ selectedOrder.user?.email }}</p>
         </div>
-        <div class="mt-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <h3 class="font-semibold">Customer Information</h3>
-              <p>{{ selectedOrder.user?.email }}</p>
-            </div>
-            <div>
-              <h3 class="font-semibold">Shipping Address</h3>
-              <p>{{ selectedOrder.shipping_address?.name }}</p>
-              <p>{{ selectedOrder.shipping_address?.address1 }}</p>
-              <p>{{ selectedOrder.shipping_address?.city }}, {{ selectedOrder.shipping_address?.prefecture }}</p>
-              <p>{{ selectedOrder.shipping_address?.postal_code }}</p>
-            </div>
-          </div>
-          <div class="mt-4">
-            <h3 class="font-semibold">Order Items</h3>
-            <div class="mt-2 space-y-2">
-              <div v-for="item in selectedOrder.items" :key="item.id" class="border-b pb-2">
-                <div class="flex justify-between">
-                  <div>
-                    <p>{{ item.design.prompt }}</p>
-                    <p class="text-sm text-gray-600">Size: {{ item.size }}, Color: {{ item.color }}</p>
-                  </div>
-                  <div>
-                    <p>{{ item.quantity }} x ¥2,000</p>
-                  </div>
+        <div class="bg-gray-50 p-4 rounded">
+          <h3 class="font-semibold text-gray-700 mb-2">Shipping Address</h3>
+          <p>{{ selectedOrder.shipping_address?.name }}</p>
+          <p>{{ selectedOrder.shipping_address?.address1 }}</p>
+          <p>{{ selectedOrder.shipping_address?.city }}, {{ selectedOrder.shipping_address?.prefecture }}</p>
+          <p>{{ selectedOrder.shipping_address?.postal_code }}</p>
+        </div>
+      </div>
+
+      <!-- 注文アイテム -->
+      <div class="bg-white">
+        <h3 class="font-semibold text-gray-700 mb-4">Order Items</h3>
+        <div class="space-y-4">
+          <div 
+            v-for="item in selectedOrder.items" 
+            :key="item.id" 
+            class="border rounded-lg p-4"
+          >
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <div class="flex flex-col md:flex-row gap-4">
+                <!-- 画像 -->
+                <div class="w-32 h-32 flex-shrink-0">
+                  <img 
+                    :src="item.design.image_url" 
+                    :alt="item.design.prompt"
+                    class="w-full h-full object-cover rounded-lg border"
+                    @error="handleImageError"
+                  />
                 </div>
+                <!-- 商品詳細 -->
+                <div>
+                  <p class="font-medium">{{ item.design.prompt }}</p>
+                  <p class="text-sm text-gray-600 mt-1">
+                    Size: {{ item.size }}, Color: {{ item.color }}
+                  </p>
+                </div>
+              </div>
+              <!-- 価格情報 -->
+              <div class="text-right">
+                <p class="font-medium">{{ item.quantity }} x ¥{{ item.price?.toLocaleString() ?? '2,000' }}</p>
               </div>
             </div>
           </div>
-          <div class="mt-4 text-right">
-            <p class="font-semibold">Total: ¥{{ selectedOrder.total_amount.toLocaleString() }}</p>
-          </div>
         </div>
       </div>
+
+      <!-- 合計金額 -->
+      <div class="mt-6 border-t pt-4">
+        <p class="text-right font-semibold text-lg">
+          Total: ¥{{ selectedOrder.total_amount.toLocaleString() }}
+        </p>
+      </div>
     </div>
+  </div>
+</div>
   </div>
 </template>
 
@@ -259,6 +297,12 @@ const nextPage = () => {
     currentPage.value++
     fetchOrders()
   }
+}
+
+const handleImageError = (e: Event) => {
+  const target = e.target as HTMLImageElement;
+  target.src = '/placeholder-image.png' // プレースホルダー画像のパスに変更してください
+  console.error('Image failed to load:', target.src)
 }
 
 onMounted(() => {
