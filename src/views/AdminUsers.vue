@@ -235,7 +235,7 @@ const fetchUsers = async () => {
             }
         })
         
-        users.value = response.data.data
+        users.value = response.data.users
         totalItems.value = response.data.total
         totalPages.value = response.data.pages
     } catch (error) {
@@ -243,11 +243,16 @@ const fetchUsers = async () => {
     }
 }
 
-const openUserModal = (user: User) => {
-    selectedUser.value = { ...user }
+const openUserModal = (user) => {
+ selectedUser.value = { ...user }
 }
 
 const updateUser = async () => {
+    // selectedUserがnullの場合の早期リターン
+  if (!selectedUser.value) {
+    console.error('No user selected')
+    return
+  }
  try {
    await axios.post(
      'http://localhost:5000/api/admin/users/manage',

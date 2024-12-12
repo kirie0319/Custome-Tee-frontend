@@ -46,3 +46,6 @@ export interface PaginatedResponse<T> {
     total: number
     pages: number
 }
+
+// 既存の型定義の後に追加
+export type UserAction = 'activate' | 'deactivate' | 'make_admin' | 'remove_admin'

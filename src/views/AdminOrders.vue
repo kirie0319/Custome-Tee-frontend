@@ -280,7 +280,7 @@ const fetchOrders = async () => {
             }
         })
         
-        orders.value = response.data.data
+        orders.value = response.data.orders
         totalItems.value = response.data.total
         totalPages.value = response.data.pages
     } catch (error) {
