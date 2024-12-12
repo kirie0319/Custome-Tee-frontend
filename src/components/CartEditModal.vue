@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import TShirtPreview from './TShirtPreview.vue'
 import type { DesignConfig } from '@/types/cart'
 import { useCartStore } from '@/stores/cart'
@@ -85,6 +85,7 @@ const emit = defineEmits<{
   'item-updated': [itemId: number]
 }>()
 
+const cartStore = useCartStore()
 const cartItems = computed((): CartItem[] => cartStore.items)
 const editedItem = ref({ ...props.item })
 const designConfig = ref<DesignConfig | null>(null)
