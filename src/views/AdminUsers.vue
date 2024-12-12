@@ -193,37 +193,58 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { debounce } from 'lodash'
+import type { User, PaginatedResponse } from '@/types/admin'
 
 const authStore = useAuthStore()
-const users = ref([])
-const selectedUser = ref(null)
+const users = ref<User[]>([])
+const selectedUser = ref<User | null>(null)
 const searchQuery = ref('')
 const currentPage = ref(1)
 const perPage = ref(10)
 const totalItems = ref(0)
 const totalPages = ref(1)
 
-const fetchUsers = async () => {
- try {
-   const response = await axios.get('http://localhost:5000/api/admin/users', {
-     headers: { Authorization: `Bearer ${authStore.token}` },
-     params: {
-       page: currentPage.value,
-       per_page: perPage.value,
-       search: searchQuery.value
-     }
-   })
+// const fetchUsers = async () => {
+//  try {
+//    const response = await axios.get('http://localhost:5000/api/admin/users', {
+//      headers: { Authorization: `Bearer ${authStore.token}` },
+//      params: {
+//        page: currentPage.value,
+//        per_page: perPage.value,
+//        search: searchQuery.value
+//      }
+//    })
    
-   users.value = response.data.users
-   totalItems.value = response.data.total
-   totalPages.value = response.data.pages
- } catch (error) {
-   console.error('Failed to fetch users:', error)
- }
+//    users.value = response.data.users
+//    totalItems.value = response.data.total
+//    totalPages.value = response.data.pages
+//  } catch (error) {
+//    console.error('Failed to fetch users:', error)
+//  }
+// }
+
+// 型付きのfetchUsers
+const fetchUsers = async () => {
+    try {
+        const response = await axios.get<PaginatedResponse<User>>('http://localhost:5000/api/admin/users', {
+            headers: { Authorization: `Bearer ${authStore.token}` },
+            params: {
+                page: currentPage.value,
+                per_page: perPage.value,
+                search: searchQuery.value
+            }
+        })
+        
+        users.value = response.data.data
+        totalItems.value = response.data.total
+        totalPages.value = response.data.pages
+    } catch (error) {
+        console.error('Failed to fetch users:', error)
+    }
 }
 
-const openUserModal = (user) => {
- selectedUser.value = { ...user }
+const openUserModal = (user: User) => {
+    selectedUser.value = { ...user }
 }
 
 const updateUser = async () => {
