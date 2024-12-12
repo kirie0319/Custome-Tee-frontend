@@ -313,15 +313,19 @@ const updateOrderStatus = async (order: Order) => {
     }
 }
 
-const viewOrderDetails = async (order) => {
+const viewOrderDetails = async (order: Order) => {
   try {
-    const response = await axios.get(
+    const response = await axios.get<Order>(
       `http://localhost:5000/api/admin/orders/${order.id}`,
       { headers: { Authorization: `Bearer ${authStore.token}` } }
     )
     selectedOrder.value = response.data
   } catch (error) {
-    console.error('Failed to fetch order details:', error)
+    if (axios.isAxiosError(error)) {
+      console.error('Failed to fetch order details:', error.response?.data)
+    } else {
+      console.error('An unexpected error occurred:', error)
+    }
   }
 }
 
