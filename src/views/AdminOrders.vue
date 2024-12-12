@@ -227,50 +227,90 @@
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
+// 修正箇所
+import type { Order, OrderStatus, PaginatedResponse } from '@/types/admin'
 
 const authStore = useAuthStore()
-const orders = ref([])
-const selectedOrder = ref(null)
+// const orders = ref([])
+// const selectedOrder = ref(null)
+const orders = ref<Order[]>([])
+const selectedOrder = ref<Order | null>(null)
 const currentPage = ref(1)
 const perPage = ref(10)
 const totalItems = ref(0)
 const totalPages = ref(1)
 
 const filters = ref({
-  status: '',
+  // status: '',
+  status: '' as OrderStatus | '',
   query: ''
 })
 
-const fetchOrders = async () => {
-  try {
-    const response = await axios.get('http://localhost:5000/api/admin/orders/search', {
-      headers: { Authorization: `Bearer ${authStore.token}` },
-      params: {
-        page: currentPage.value,
-        per_page: perPage.value,
-        status: filters.value.status,
-        query: filters.value.query
-      }
-    })
+// const fetchOrders = async () => {
+//   try {
+//     const response = await axios.get('http://localhost:5000/api/admin/orders/search', {
+//       headers: { Authorization: `Bearer ${authStore.token}` },
+//       params: {
+//         page: currentPage.value,
+//         per_page: perPage.value,
+//         status: filters.value.status,
+//         query: filters.value.query
+//       }
+//     })
     
-    orders.value = response.data.orders
-    totalItems.value = response.data.total
-    totalPages.value = response.data.pages
-  } catch (error) {
-    console.error('Failed to fetch orders:', error)
-  }
+//     orders.value = response.data.orders
+//     totalItems.value = response.data.total
+//     totalPages.value = response.data.pages
+//   } catch (error) {
+//     console.error('Failed to fetch orders:', error)
+//   }
+// }
+
+
+// 修正箇所
+const fetchOrders = async () => {
+    try {
+        const response = await axios.get<PaginatedResponse<Order>>('http://localhost:5000/api/admin/orders/search', {
+            headers: { Authorization: `Bearer ${authStore.token}` },
+            params: {
+                page: currentPage.value,
+                per_page: perPage.value,
+                status: filters.value.status,
+                query: filters.value.query
+            }
+        })
+        
+        orders.value = response.data.data
+        totalItems.value = response.data.total
+        totalPages.value = response.data.pages
+    } catch (error) {
+        console.error('Failed to fetch orders:', error)
+    }
 }
 
-const updateOrderStatus = async (order) => {
-  try {
-    await axios.put(
-      `http://localhost:5000/api/admin/orders/${order.id}/status`,
-      { status: order.status },
-      { headers: { Authorization: `Bearer ${authStore.token}` } }
-    )
-  } catch (error) {
-    console.error('Failed to update order status:', error)
-  }
+// const updateOrderStatus = async (order) => {
+//   try {
+//     await axios.put(
+//       `http://localhost:5000/api/admin/orders/${order.id}/status`,
+//       { status: order.status },
+//       { headers: { Authorization: `Bearer ${authStore.token}` } }
+//     )
+//   } catch (error) {
+//     console.error('Failed to update order status:', error)
+//   }
+// }
+
+// 修正箇所
+const updateOrderStatus = async (order: Order) => {
+    try {
+        await axios.put(
+            `http://localhost:5000/api/admin/orders/${order.id}/status`,
+            { status: order.status },
+            { headers: { Authorization: `Bearer ${authStore.token}` } }
+        )
+    } catch (error) {
+        console.error('Failed to update order status:', error)
+    }
 }
 
 const viewOrderDetails = async (order) => {

@@ -71,13 +71,21 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import TShirtPreview from './TShirtPreview.vue'
-import type { DesignConfig } from '@/types/cart'
+import type { CartItem } from '@/types/cart'
 import { useCartStore } from '@/stores/cart'
-import type { CartItem } from '@/types/cart'  // 型をインポート
+import type { DesignConfig } from '@/types/design'
+import { DEFAULT_DESIGN_CONFIG } from '@/types/design'
+
+interface CartItemWithDesign extends CartItem {
+  design: {
+    image_url: string
+    prompt: string
+  }
+}
 
 const props = defineProps<{
   modelValue: boolean
-  item: any
+  item: CartItemWithDesign
 }>()
 
 const emit = defineEmits<{
@@ -87,8 +95,27 @@ const emit = defineEmits<{
 
 const cartStore = useCartStore()
 const cartItems = computed((): CartItem[] => cartStore.items)
-const editedItem = ref({ ...props.item })
-const designConfig = ref<DesignConfig | null>(null)
+
+// editedItemの型を明示的に定義
+interface EditedItem {
+  quantity: number
+  size: string
+  color: string
+}
+
+// const editedItem = ref({ ...props.item })
+const editedItem = ref<EditedItem>({
+  quantity: props.item.quantity,
+  size: props.item.size,
+  color: props.item.color
+})
+
+// const designConfig = ref<DesignConfig | null>(null)
+// designConfigの初期化を修正
+const designConfig = ref<DesignConfig>({
+  ...DEFAULT_DESIGN_CONFIG,
+  ...props.item.design_config
+})
 
 onMounted(() => {
   if (props.item.design_config) {
@@ -96,6 +123,11 @@ onMounted(() => {
   }
 })
 
+// const updateDesignConfig = (config: DesignConfig) => {
+//   designConfig.value = config
+// }
+
+// updateDesignConfigの型を明確に
 const updateDesignConfig = (config: DesignConfig) => {
   designConfig.value = config
 }

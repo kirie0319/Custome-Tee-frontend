@@ -90,29 +90,47 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { DesignConfig } from '@/types/design'
+import { DEFAULT_DESIGN_CONFIG } from '@/types/design'
 
 const { t } = useI18n()
 
-// Props の定義
+// // Props の定義
+// const props = defineProps<{
+//   designImage: string
+//   initialConfig: {
+//     color: string
+//     position: { x: number, y: number }
+//     scale: number
+//     rotation: number
+//   }
+// }>()
+// Props の型定義を修正
 const props = defineProps<{
   designImage: string
-  initialConfig: {
-    color: string
-    position: { x: number, y: number }
-    scale: number
-    rotation: number
-  }
+  initialConfig: DesignConfig
 }>()
 
+// const emit = defineEmits<{
+//   'update:designConfig': [config: typeof props.initialConfig]
+// }>()
+
+// Emitの型定義を明確に
 const emit = defineEmits<{
-  'update:designConfig': [config: typeof props.initialConfig]
+  'update:designConfig': [config: DesignConfig]
 }>()
 
-// 状態管理
-const selectedColor = ref(props.initialConfig.color)
-const position = ref({ ...props.initialConfig.position })
-const scale = ref(props.initialConfig.scale)
-const rotation = ref(props.initialConfig.rotation)
+// // 状態管理
+// const selectedColor = ref(props.initialConfig.color)
+// const position = ref({ ...props.initialConfig.position })
+// const scale = ref(props.initialConfig.scale)
+// const rotation = ref(props.initialConfig.rotation)
+
+// 状態管理の型付け
+const selectedColor = ref<string>(props.initialConfig.color)
+const position = ref<{ x: number, y: number }>(props.initialConfig.position)
+const scale = ref<number>(props.initialConfig.scale)
+const rotation = ref<number>(props.initialConfig.rotation)
 
 // Tシャツ画像のURL
 const tshirtImageUrl = computed(() => {
@@ -135,29 +153,62 @@ const updateColor = (color: string) => {
   emitUpdate()
 }
 
-// 設定変更通知
+// // 設定変更通知
+// const emitUpdate = () => {
+//   emit('update:designConfig', {
+//     color: selectedColor.value,
+//     position: position.value,
+//     scale: scale.value,
+//     rotation: rotation.value
+//   })
+// }
+
+// 設定変更通知の型安全性を確保
 const emitUpdate = () => {
-  emit('update:designConfig', {
+  const config: DesignConfig = {
     color: selectedColor.value,
     position: position.value,
     scale: scale.value,
     rotation: rotation.value
-  })
+  }
+  emit('update:designConfig', config)
 }
 
-// リセット機能
+// // リセット機能
+// const resetDesign = () => {
+//   position.value = { x: 50, y: 50 }
+//   scale.value = 1
+//   rotation.value = 0
+//   selectedColor.value = props.initialConfig.color
+//   emitUpdate()
+// }
+
+// リセット機能を修正
 const resetDesign = () => {
-  position.value = { x: 50, y: 50 }
-  scale.value = 1
-  rotation.value = 0
-  selectedColor.value = props.initialConfig.color
+  const defaultConfig = { ...DEFAULT_DESIGN_CONFIG }
+  position.value = defaultConfig.position
+  scale.value = defaultConfig.scale
+  rotation.value = defaultConfig.rotation
+  selectedColor.value = defaultConfig.color
   emitUpdate()
 }
 
-// 親からの設定更新を監視
+// // 親からの設定更新を監視
+// watch(
+//   () => props.initialConfig,
+//   (newConfig) => {
+//     selectedColor.value = newConfig.color
+//     position.value = { ...newConfig.position }
+//     scale.value = newConfig.scale
+//     rotation.value = newConfig.rotation
+//   },
+//   { deep: true }
+// )
+
+// watchの型安全性を向上
 watch(
   () => props.initialConfig,
-  (newConfig) => {
+  (newConfig: DesignConfig) => {
     selectedColor.value = newConfig.color
     position.value = { ...newConfig.position }
     scale.value = newConfig.scale
