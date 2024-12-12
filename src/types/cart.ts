@@ -26,7 +26,7 @@ export interface CartItemInput {
   design_config: DesignConfig
 }
 
-  export interface GeneratedDesign {
+  export interface GenerateDesignResponse {
     id: number
     image_url: string
     prompt: string
@@ -40,4 +40,5 @@ export interface CartItem {
   color: string
   price: number
   design_config: DesignConfig
+  design: GenerateDesignResponse  // これを追加
 }
