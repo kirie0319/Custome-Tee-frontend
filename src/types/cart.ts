@@ -21,5 +21,13 @@ export interface DesignConfig {
     image_url: string
     prompt: string
   }
-
-  
+// src/types/cart.ts に追加
+export interface CartItem {
+  id: number
+  design_id: number
+  quantity: number
+  size: string
+  color: string
+  price: number
+  design_config: DesignConfig
+}

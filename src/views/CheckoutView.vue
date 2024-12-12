@@ -110,6 +110,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ChevronLeft, MapPin, CreditCard, Box } from 'lucide-vue-next'
 import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '@/types/cart'  // 型をインポート
 import PaymentForm from '@/components/PaymentForm.vue'
 
 const router = useRouter()
@@ -126,7 +127,7 @@ const shippingAddress = {
  city: '渋谷区'
 }
 
-const cartItems = computed(() => cartStore.items)
+const cartItems = computed((): CartItem[] => cartStore.items)
 const subtotal = computed(() => 
  cartItems.value.reduce((sum, item) => sum + (item.price * item.quantity), 0)
 )
