@@ -268,7 +268,7 @@ const filters = ref({
 
 
 // 修正箇所
-const fetchOrders = async () => {
+const fetchOrders = async (order: Order) => {
     try {
         const response = await axios.get<PaginatedResponse<Order>>('http://localhost:5000/api/admin/orders/search', {
             headers: { Authorization: `Bearer ${authStore.token}` },
