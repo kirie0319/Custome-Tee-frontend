@@ -73,6 +73,7 @@ import { ref, onMounted } from 'vue'
 import TShirtPreview from './TShirtPreview.vue'
 import type { DesignConfig } from '@/types/cart'
 import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '@/types/cart'  // 型をインポート
 
 const props = defineProps<{
   modelValue: boolean
@@ -84,7 +85,7 @@ const emit = defineEmits<{
   'item-updated': [itemId: number]
 }>()
 
-const cartStore = useCartStore()
+const cartItems = computed((): CartItem[] => cartStore.items)
 const editedItem = ref({ ...props.item })
 const designConfig = ref<DesignConfig | null>(null)
 

@@ -180,18 +180,15 @@ const error = ref('')
 const generatedDesign = ref<any>(null)
 
 const designConfig = ref<DesignConfig>({
-  // color: 'white',
+  color: 'white',
   position: { x: 50, y: 50 },
   scale: 1,
   rotation: 0
 })
 
-// 2. T シャツの色は別の state として管理
-const designColor = ref('white')
-
 const updateColor = (newColor: string) => {
   color.value = newColor
-  designColor.value = newColor.toLowerCase()
+  designConfig.value.color = newColor.toLowerCase()
 }
 
 const updateDesignConfig = (config: DesignConfig) => {
@@ -223,7 +220,7 @@ const addToCart = async () => {
       size: size.value,
       color: color.value,
       design_config: {
-        // color: designConfig.value.color,
+        color: designConfig.value.color,
         position: {
           x: designConfig.value.position.x,
           y: designConfig.value.position.y

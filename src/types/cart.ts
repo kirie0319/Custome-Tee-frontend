@@ -1,5 +1,6 @@
 // src/types/cart.ts
 export interface DesignConfig {
+    color: string
     position: {
       x: number
       y: number
