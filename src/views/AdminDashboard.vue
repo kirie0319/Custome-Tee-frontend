@@ -135,25 +135,33 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { DollarSignIcon, ShoppingBagIcon, UsersIcon } from 'lucide-react'
+import type { Order, OrderStatus } from '@/types/order'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const stats = ref({
-  total_sales: 0,
-  total_orders: 0,
-  total_users: 0,
-  recent_orders: []
+interface DashboardStats {
+    total_sales: number
+    total_orders: number
+    total_users: number
+    recent_orders: Order[]
+}
+
+const stats = ref<DashboardStats>({
+    total_sales: 0,
+    total_orders: 0,
+    total_users: 0,
+    recent_orders: []
 })
 
 // ステータスに応じたクラスを返す
-const getStatusClass = (status: string) => {
+const getStatusClass = (status: OrderStatus) => {
   const classes = {
     paid: 'bg-blue-100 text-blue-800',
     processing: 'bg-yellow-100 text-yellow-800',
     shipped: 'bg-green-100 text-green-800',
     delivered: 'bg-green-100 text-green-800',
     cancelled: 'bg-red-100 text-red-800'
-  }
+  } as const
   return classes[status] || 'bg-gray-100 text-gray-800'
 }
 

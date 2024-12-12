@@ -17,6 +17,15 @@ export interface DesignConfig {
     design_config: DesignConfig
   }
   
+
+export interface CartItemInput {
+  design_id: number
+  quantity: number
+  size: string
+  color: string
+  design_config: DesignConfig
+}
+
   export interface GeneratedDesign {
     id: number
     image_url: string
