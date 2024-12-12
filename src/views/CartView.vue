@@ -108,12 +108,13 @@ import { useRouter } from 'vue-router'
 import { Edit, Trash2 } from 'lucide-vue-next'
 import MobileFooter from '@/components/MobileFooter.vue'
 import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '@/types/cart'  // 型をインポート
 
 const router = useRouter()
 const cartStore = useCartStore()
 const isLoading = ref(false)
 
-const cartItems = computed(() => cartStore.items)
+const cartItems = computed((): CartItem[] => cartStore.items)
 const totalAmount = computed(() => {
   return cartItems.value.reduce((total, item) => total + (2000 * item.quantity), 0)
 })
