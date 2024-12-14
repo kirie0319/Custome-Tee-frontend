@@ -160,10 +160,13 @@ const rules = computed(() => ({
 }))
 
 // const v$ = useVuelidate(rules, form, { $messages: validationMessages.value })
+// const v$ = useVuelidate(rules, form, { 
+//   globalConfig: { 
+//     messages: validationMessages.value 
+//   } 
+// })
 const v$ = useVuelidate(rules, form, { 
-  globalConfig: { 
-    messages: validationMessages.value 
-  } 
+  $messages: validationMessages.value 
 })
 
 // 登録処理
