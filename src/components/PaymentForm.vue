@@ -23,7 +23,7 @@
 import { ref, onMounted } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { stripePromise } from '@/utils/stripe';
-import { StripeError } from '@stripe/stripe-js';
+import type { StripeError } from '@stripe/stripe-js';
 
 const props = defineProps<{
   clientSecret: string;
@@ -72,10 +72,10 @@ const handleSubmit = async () => {
     const stripe = await stripePromise;
     if (!stripe) throw new Error('Stripeの初期化に失敗しました');
 
-    const { error: stripeError } = await stripe.confirmPayment({
+    const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
-    }) as { error: StripeError | undefined };
+    });
 
     if (stripeError) {
       error.value = stripeError.message || '決済処理に失敗しました';
@@ -83,9 +83,15 @@ const handleSubmit = async () => {
       return;
     }
 
+    if (!paymentIntent) {
+      error.value = '支払い情報が取得できませんでした';
+      emit('error', error.value);
+      return;
+    }
+
     // 決済の確認
     const result = await cartStore.confirmPayment(
-      stripeError?.payment_intent?.id ?? '',
+      paymentIntent.id,
       props.shippingAddress
     );
     
