@@ -243,7 +243,7 @@ const fetchUsers = async () => {
     }
 }
 
-const openUserModal = (user) => {
+const openUserModal = (user: User) => {
  selectedUser.value = { ...user }
 }
 
@@ -272,6 +272,19 @@ const updateUser = async () => {
        },
        { headers: { Authorization: `Bearer ${authStore.token}` } }
      )
+     // 現在のユーザーを検索
+    const currentUser = users.value.find(u => u.id === selectedUser.value?.id)
+    if (currentUser && selectedUser.value.is_admin !== currentUser.is_admin) {
+      await axios.post(
+        'http://localhost:5000/api/admin/users/manage',
+        {
+          user_id: selectedUser.value.id,
+          action: selectedUser.value.is_admin ? 'make_admin' : 'remove_admin'
+        },
+        { headers: { Authorization: `Bearer ${authStore.token}` } }
+      )
+    }
+    
    }
 
    await fetchUsers()
