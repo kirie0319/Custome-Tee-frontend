@@ -118,6 +118,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useVuelidate } from '@vuelidate/core'
 // import type { ValidatorOptions } from '@vuelidate/core'
+import { GlobalConfig } from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 
 const { t } = useI18n()
@@ -160,15 +161,14 @@ const rules = computed(() => ({
   }
 }))
 
-// VuelidateOptionsインターフェースを追加
-interface VuelidateOptions {
-  $messages: Record<string, (params?: any) => string>
+// 型拡張
+interface CustomGlobalConfig extends GlobalConfig {
+  $messages?: Record<string, (params?: any) => string>
 }
 
-// useVuelidateの呼び出しを修正
 const v$ = useVuelidate(rules, form, { 
   $messages: validationMessages.value 
-} satisfies VuelidateOptions)
+} as CustomGlobalConfig)
 
 // 登録処理
 const handleRegister = async () => {
