@@ -248,32 +248,26 @@ const openUserModal = (user: User) => {
 }
 
 const updateUser = async () => {
-    // selectedUserがnullの場合の早期リターン
   if (!selectedUser.value) {
     console.error('No user selected')
     return
   }
- try {
-   await axios.post(
-     'http://localhost:5000/api/admin/users/manage',
-     {
-       user_id: selectedUser.value.id,
-       action: selectedUser.value.is_active ? 'activate' : 'deactivate'
-     },
-     { headers: { Authorization: `Bearer ${authStore.token}` } }
-   )
 
-   if (selectedUser.value.is_admin !== users.value.find(u => u.id === selectedUser.value.id).is_admin) {
-     await axios.post(
-       'http://localhost:5000/api/admin/users/manage',
-       {
-         user_id: selectedUser.value.id,
-         action: selectedUser.value.is_admin ? 'make_admin' : 'remove_admin'
-       },
-       { headers: { Authorization: `Bearer ${authStore.token}` } }
-     )
-     // 現在のユーザーを検索
+  try {
+    // アクティブ状態の更新
+    await axios.post(
+      'http://localhost:5000/api/admin/users/manage',
+      {
+        user_id: selectedUser.value.id,
+        action: selectedUser.value.is_active ? 'activate' : 'deactivate'
+      },
+      { headers: { Authorization: `Bearer ${authStore.token}` } }
+    )
+
+    // 現在のユーザーを検索
     const currentUser = users.value.find(u => u.id === selectedUser.value?.id)
+    
+    // 管理者権限の更新（ユーザーが見つかった場合のみ）
     if (currentUser && selectedUser.value.is_admin !== currentUser.is_admin) {
       await axios.post(
         'http://localhost:5000/api/admin/users/manage',
@@ -284,14 +278,12 @@ const updateUser = async () => {
         { headers: { Authorization: `Bearer ${authStore.token}` } }
       )
     }
-    
-   }
 
-   await fetchUsers()
-   selectedUser.value = null
- } catch (error) {
-   console.error('Failed to update user:', error)
- }
+    await fetchUsers()
+    selectedUser.value = null
+  } catch (error) {
+    console.error('Failed to update user:', error)
+  }
 }
 
 const debounceSearch = debounce(() => {
