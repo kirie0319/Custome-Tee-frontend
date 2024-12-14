@@ -147,7 +147,13 @@ const cartStore = useCartStore()
 const componentKey = ref(0)
 const cartItem = ref<any>(null)
 const editedItem = ref<any>(null)
-const designConfig = ref<DesignConfig | null>(null)
+// const designConfig = ref<DesignConfig | null>(null)
+const designConfig = ref<DesignConfig>({
+  color: 'white',
+  position: { x: 50, y: 50 },
+  scale: 1,
+  rotation: 0
+})
 const isSaving = ref(false)
 
 // Tシャツの色が変更された時の処理
@@ -183,10 +189,22 @@ const fetchCartItem = async () => {
 }
 
 // デザイン設定の更新
+// const updateDesignConfig = (config: DesignConfig) => {
+//   designConfig.value = {
+//     ...config,
+//     color: editedItem.value.color.toLowerCase()
+//   }
+//   componentKey.value++
+// }
+
 const updateDesignConfig = (config: DesignConfig) => {
+  if (!editedItem.value) return
+  
   designConfig.value = {
-    ...config,
-    color: editedItem.value.color.toLowerCase()
+    color: editedItem.value.color.toLowerCase(),
+    position: config.position,
+    scale: config.scale,
+    rotation: config.rotation
   }
   componentKey.value++
 }
