@@ -117,7 +117,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useVuelidate } from '@vuelidate/core'
-import type { ValidatorOptions } from '@vuelidate/core'
+// import type { ValidatorOptions } from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 
 const { t } = useI18n()
@@ -161,9 +161,10 @@ const rules = computed(() => ({
 }))
 
 // const v$ = useVuelidate(rules, form, { $messages: validationMessages.value })
+// useVuelidateの呼び出しを修正
 const v$ = useVuelidate(rules, form, { 
   $messages: validationMessages.value 
-} as ValidatorOptions)
+} as const)
 
 // 登録処理
 const handleRegister = async () => {
