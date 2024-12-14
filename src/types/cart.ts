@@ -26,22 +26,21 @@ export interface CartItemInput {
   design_config: DesignConfig
 }
 
-  // export interface GenerateDesignResponse {
-  //   id: number
-  //   image_url: string
-  //   prompt: string
-  // }
 
-  export interface GenerateDesignResponse {
-    design: {
-      created_at: string
-      id: number
-      image_url: string
-      prompt: string
-    }
-    message: string
-  }
-  
+// GenerateDesignResponseの型定義
+export interface GenerateDesignResponse {
+  design: GenerateDesignDetails // `design`の型を別途定義
+  message: string
+}
+
+// `design`型を分離してエクスポート
+export interface GenerateDesignDetails {
+  created_at: string
+  id: number
+  image_url: string
+  prompt: string
+}
+
 // src/types/cart.ts に追加
 export interface CartItem {
   id: number
@@ -51,5 +50,5 @@ export interface CartItem {
   color: string
   price: number
   design_config: DesignConfig
-  design: GenerateDesignResponse  // これを追加
+  design: GenerateDesignDetails // これを追加
 }
