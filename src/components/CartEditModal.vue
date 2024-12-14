@@ -78,6 +78,7 @@ import { DEFAULT_DESIGN_CONFIG } from '@/types/design'
 
 interface CartItemWithDesign extends CartItem {
   design: {
+    id: number
     image_url: string
     prompt: string
   }
