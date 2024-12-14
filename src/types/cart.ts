@@ -35,7 +35,7 @@ export interface GenerateDesignResponse {
 
 // `design`型を分離してエクスポート
 export interface GenerateDesignDetails {
-  created_at: string
+  // created_at: string
   id: number
   image_url: string
   prompt: string
