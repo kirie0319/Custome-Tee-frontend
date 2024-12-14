@@ -26,11 +26,22 @@ export interface CartItemInput {
   design_config: DesignConfig
 }
 
+  // export interface GenerateDesignResponse {
+  //   id: number
+  //   image_url: string
+  //   prompt: string
+  // }
+
   export interface GenerateDesignResponse {
-    id: number
-    image_url: string
-    prompt: string
+    design: {
+      created_at: string
+      id: number
+      image_url: string
+      prompt: string
+    }
+    message: string
   }
+  
 // src/types/cart.ts に追加
 export interface CartItem {
   id: number
