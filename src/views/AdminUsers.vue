@@ -194,6 +194,7 @@ import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { debounce } from 'lodash'
 import type { User, PaginatedResponseUser } from '@/types/admin'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const authStore = useAuthStore()
 const users = ref<User[]>([])
@@ -226,7 +227,7 @@ const totalPages = ref(1)
 // 型付きのfetchUsers
 const fetchUsers = async () => {
     try {
-        const response = await axios.get<PaginatedResponseUser<User>>('http://localhost:5000/api/admin/users', {
+        const response = await axios.get<PaginatedResponseUser<User>>(`${API_BASE_URL}/admin/users`, {
             headers: { Authorization: `Bearer ${authStore.token}` },
             params: {
                 page: currentPage.value,
@@ -256,7 +257,7 @@ const updateUser = async () => {
   try {
     // アクティブ状態の更新
     await axios.post(
-      'http://localhost:5000/api/admin/users/manage',
+      `${API_BASE_URL}/admin/users/manage`,
       {
         user_id: selectedUser.value.id,
         action: selectedUser.value.is_active ? 'activate' : 'deactivate'
@@ -270,7 +271,7 @@ const updateUser = async () => {
     // 管理者権限の更新（ユーザーが見つかった場合のみ）
     if (currentUser && selectedUser.value.is_admin !== currentUser.is_admin) {
       await axios.post(
-        'http://localhost:5000/api/admin/users/manage',
+        `${API_BASE_URL}/admin/users/manage`,
         {
           user_id: selectedUser.value.id,
           action: selectedUser.value.is_admin ? 'make_admin' : 'remove_admin'

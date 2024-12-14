@@ -229,6 +229,7 @@ import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 // 修正箇所
 import type { Order, OrderStatus, PaginatedResponseOrder } from '@/types/admin'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const authStore = useAuthStore()
 // const orders = ref([])
@@ -270,7 +271,7 @@ const filters = ref({
 // 修正箇所
 const fetchOrders = async () => {
     try {
-        const response = await axios.get<PaginatedResponseOrder<Order>>('http://localhost:5000/api/admin/orders/search', {
+        const response = await axios.get<PaginatedResponseOrder<Order>>(`${API_BASE_URL}/admin/orders/search`, {
             headers: { Authorization: `Bearer ${authStore.token}` },
             params: {
                 page: currentPage.value,
@@ -304,7 +305,7 @@ const fetchOrders = async () => {
 const updateOrderStatus = async (order: Order) => {
     try {
         await axios.put(
-            `http://localhost:5000/api/admin/orders/${order.id}/status`,
+            `${API_BASE_URL}/admin/orders/${order.id}/status`,
             { status: order.status },
             { headers: { Authorization: `Bearer ${authStore.token}` } }
         )
@@ -316,7 +317,7 @@ const updateOrderStatus = async (order: Order) => {
 const viewOrderDetails = async (order: Order) => {
   try {
     const response = await axios.get<Order>(
-      `http://localhost:5000/api/admin/orders/${order.id}`,
+      `${API_BASE_URL}/admin/orders/${order.id}`,
       { headers: { Authorization: `Bearer ${authStore.token}` } }
     )
     selectedOrder.value = response.data

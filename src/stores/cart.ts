@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useAuthStore } from './auth'
 import type { CartItem, CartItemInput, GenerateDesignResponse } from '@/types/cart'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -20,7 +21,7 @@ export const useCartStore = defineStore('cart', {
       
       try {
         const response = await axios.post<GenerateDesignResponse>(
-          'http://localhost:5000/api/designs/generate',
+          `${API_BASE_URL}/designs/generate`,
           { prompt },
           {
             headers: { 
@@ -46,7 +47,7 @@ export const useCartStore = defineStore('cart', {
       
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/cart/add',
+          `${API_BASE_URL}/cart/add`,
           {
             ...data,
             quantity: data.quantity || 1
@@ -75,7 +76,7 @@ export const useCartStore = defineStore('cart', {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/payment/confirm-payment',
+          `${API_BASE_URL}/payment/confirm-payment`,
           {
             payment_intent_id: paymentIntentId,
             shipping_address: shippingAddress
@@ -101,7 +102,7 @@ export const useCartStore = defineStore('cart', {
 
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/cart/items/${itemId}`,
+          `${API_BASE_URL}/cart/items/${itemId}`,
           {
             headers: { Authorization: `Bearer ${authStore.token}` }
           }
@@ -123,7 +124,7 @@ export const useCartStore = defineStore('cart', {
 
       try {
         const response = await axios.put(
-          `http://localhost:5000/api/cart/items/${itemId}`,
+          `${API_BASE_URL}/cart/items/${itemId}`,
           updateData,
           {
             headers: { 
@@ -150,7 +151,7 @@ export const useCartStore = defineStore('cart', {
 
       try {
         await axios.delete(
-          `http://localhost:5000/api/cart/items/${itemId}`,
+          `${API_BASE_URL}/cart/items/${itemId}`,
           {
             headers: { Authorization: `Bearer ${authStore.token}` }
           }
@@ -171,7 +172,7 @@ export const useCartStore = defineStore('cart', {
       this.error = null
 
       try {
-        const response = await axios.get('http://localhost:5000/api/cart/items', {
+        const response = await axios.get(`${API_BASE_URL}/cart/items`, {
           headers: { Authorization: `Bearer ${authStore.token}` }
         })
         this.items = response.data.cart_items
@@ -191,7 +192,7 @@ export const useCartStore = defineStore('cart', {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/payment/create-payment',
+          `${API_BASE_URL}/payment/create-payment`,
           {},
           {
             headers: { Authorization: `Bearer ${authStore.token}` }

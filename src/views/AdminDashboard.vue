@@ -137,6 +137,7 @@ import axios from 'axios'
 import { DollarSignIcon, ShoppingBagIcon, UsersIcon } from 'lucide-react'
 import type { Order, OrderStatus } from '@/types/order'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 const router = useRouter()
 const authStore = useAuthStore()
 interface DashboardStats {
@@ -168,7 +169,7 @@ const getStatusClass = (status: OrderStatus) => {
 // 統計データの取得
 const fetchStats = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/admin/stats', {
+    const response = await axios.get(`${API_BASE_URL}/admin/stats`, {
       headers: {
         Authorization: `Bearer ${authStore.token}`
       }

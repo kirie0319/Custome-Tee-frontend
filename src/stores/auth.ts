@@ -2,6 +2,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 interface User {
   id: number
   username: string
@@ -50,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(username: string, password: string) {
       try {
-        const response = await axios.post<AuthResponse>('http://localhost:5000/api/auth/login', {
+        const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/login`, {
           username,
           password
         })
@@ -74,12 +76,12 @@ export const useAuthStore = defineStore('auth', {
       try {
         console.log('Registering with data:', data)  // デバッグ用
         
-        const response = await axios.post<AuthResponse>('http://localhost:5000/api/auth/register', data)
+        const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/register`, data)
         
         const { access_token, user } = response.data
         this.token = access_token
         this.user = user
-        this.isAuthenticated = true
+        this.isAuthenticated = false
         
         localStorage.setItem('token', access_token)
         axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
@@ -114,7 +116,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         if (!this.token) return null
 
-        const response = await axios.get<User>('http://localhost:5000/api/auth/me', {
+        const response = await axios.get<User>(`${API_BASE_URL}/auth/me`, {
           headers: { Authorization: `Bearer ${this.token}` }
         })
         
