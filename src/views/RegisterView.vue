@@ -160,11 +160,15 @@ const rules = computed(() => ({
   }
 }))
 
-// const v$ = useVuelidate(rules, form, { $messages: validationMessages.value })
+// VuelidateOptionsインターフェースを追加
+interface VuelidateOptions {
+  $messages: Record<string, (params?: any) => string>
+}
+
 // useVuelidateの呼び出しを修正
 const v$ = useVuelidate(rules, form, { 
   $messages: validationMessages.value 
-} as const)
+} satisfies VuelidateOptions)
 
 // 登録処理
 const handleRegister = async () => {
