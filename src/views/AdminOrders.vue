@@ -228,7 +228,7 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 // 修正箇所
-import type { Order, OrderStatus, PaginatedResponse } from '@/types/admin'
+import type { Order, OrderStatus, PaginatedResponseOrder } from '@/types/admin'
 
 const authStore = useAuthStore()
 // const orders = ref([])
@@ -266,16 +266,11 @@ const filters = ref({
 //   }
 // }
 
-interface PaginatedResponse<T> {
-    orders: T[];  // dataではなくordersとして定義
-    total: number;
-    pages: number;
-}
 
 // 修正箇所
 const fetchOrders = async () => {
     try {
-        const response = await axios.get<PaginatedResponse<Order>>('http://localhost:5000/api/admin/orders/search', {
+        const response = await axios.get<PaginatedResponseOrder<Order>>('http://localhost:5000/api/admin/orders/search', {
             headers: { Authorization: `Bearer ${authStore.token}` },
             params: {
                 page: currentPage.value,

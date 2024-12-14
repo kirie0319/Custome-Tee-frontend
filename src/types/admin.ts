@@ -41,8 +41,14 @@ export interface Order {
 
 export type OrderStatus = 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
 
-export interface PaginatedResponse<T> {
-    data: T[]
+export interface PaginatedResponseOrder<T> {
+    orders: T[]
+    total: number
+    pages: number
+}
+
+export interface PaginatedResponseUser<T> {
+    users: T[]
     total: number
     pages: number
 }

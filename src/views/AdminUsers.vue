@@ -193,7 +193,7 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { debounce } from 'lodash'
-import type { User, PaginatedResponse } from '@/types/admin'
+import type { User, PaginatedResponseUser } from '@/types/admin'
 
 const authStore = useAuthStore()
 const users = ref<User[]>([])
@@ -226,7 +226,7 @@ const totalPages = ref(1)
 // 型付きのfetchUsers
 const fetchUsers = async () => {
     try {
-        const response = await axios.get<PaginatedResponse<User>>('http://localhost:5000/api/admin/users', {
+        const response = await axios.get<PaginatedResponseUser<User>>('http://localhost:5000/api/admin/users', {
             headers: { Authorization: `Bearer ${authStore.token}` },
             params: {
                 page: currentPage.value,
