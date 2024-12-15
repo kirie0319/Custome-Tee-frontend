@@ -21,33 +21,64 @@
            <MapPin class="w-5 h-5 text-gray-600" />
            <h2 class="font-bold">お届け先</h2>
          </div>
-         <button class="text-indigo-600 text-sm">変更</button>
        </div>
-       <div class="text-sm text-gray-600">
+       <!-- <div class="text-sm text-gray-600">
          〒{{ shippingAddress.postal_code }}<br />
          {{ shippingAddress.address }}<br />
          {{ shippingAddress.name }}
-       </div>
-     </div>
+       </div> -->
+       <form class="space-y-4">
+        <div class="space-y-2">
+          <label for="name" class="block text-sm font-medium text-gray-700">お名前</label>
+          <input
+            id="name"
+            v-model="shippingAddress.name"
+            type="text"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            :class="{ 'border-red-300': errors.name }"
+            required
+          />
+          <p v-if="errors.name" class="text-sm text-red-600">{{ errors.name }}</p>
+        </div>
 
-     <!-- お支払い方法 -->
-     <div class="bg-white rounded-lg shadow p-4">
-       <div class="flex items-center space-x-2 mb-4">
-         <CreditCard class="w-5 h-5 text-gray-600" />
-         <h2 class="font-bold">お支払い方法</h2>
-       </div>
-       
-       <PaymentForm
-         v-if="clientSecret"
-         :client-secret="clientSecret"
-         :shipping-address="shippingAddress"
-         @success="handlePaymentSuccess"
-         @error="handlePaymentError"
-       />
-
-       <div v-if="paymentError" class="mt-2 text-sm text-red-600">
-         {{ paymentError }}
-       </div>
+        <div class="space-y-2">
+          <label for="postal_code" class="block text-sm font-medium text-gray-700">郵便番号</label>
+          <input
+            id="postal_code"
+            v-model="shippingAddress.postal_code"
+            type="text"
+            placeholder="123-4567"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            :class="{ 'border-red-300': errors.postal_code }"
+            required
+          />
+          <p v-if="errors.postal_code" class="text-sm text-red-600">{{ errors.postal_code }}</p>
+        </div>
+        <div class="space-y-2">
+          <label for="address" class="block text-sm font-medium text-gray-700">住所（建物の名前から部屋番号まで入れてください）</label>
+          <input
+            id="address"
+            v-model="shippingAddress.address"
+            type="text"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            :class="{ 'border-red-300': errors.address }"
+            required
+          />
+          <p v-if="errors.address" class="text-sm text-red-600">{{ errors.address }}</p>
+        </div>
+        <div class="space-y-2">
+          <label for="city" class="block text-sm font-medium text-gray-700">市区町村</label>
+          <input
+            id="city"
+            v-model="shippingAddress.city"
+            type="text"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            :class="{ 'border-red-300': errors.city }"
+            required
+          />
+          <p v-if="errors.city" class="text-sm text-red-600">{{ errors.city }}</p>
+        </div>
+       </form>
      </div>
 
      <!-- 注文内容 -->
@@ -90,18 +121,26 @@
          </div>
        </div>
      </div>
-   </main>
+     <!-- お支払い方法 -->
+     <div class="bg-white rounded-lg shadow p-4">
+       <div class="flex items-center space-x-2 mb-4">
+         <CreditCard class="w-5 h-5 text-gray-600" />
+         <h2 class="font-bold">お支払い方法</h2>
+       </div>
+       
+       <PaymentForm
+         v-if="clientSecret"
+         :client-secret="clientSecret"
+         :shipping-address="shippingAddress"
+         @success="handlePaymentSuccess"
+         @error="handlePaymentError"
+       />
 
-   <!-- 注文確定ボタン -->
-   <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
-     <button 
-       @click="handleSubmit"
-       class="w-full bg-indigo-600 text-white py-4 rounded-lg font-bold"
-       :disabled="isProcessing"
-     >
-       {{ isProcessing ? '処理中...' : '注文を確定する' }}
-     </button>
-   </div>
+       <div v-if="paymentError" class="mt-2 text-sm text-red-600">
+         {{ paymentError }}
+       </div>
+     </div>
+   </main>
  </div>
 </template>
 
@@ -119,17 +158,62 @@ const isProcessing = ref(false)
 const clientSecret = ref<string | null>(null)
 const paymentError = ref<string | null>(null)
 
+// エラー状態の管理を追加
+const errors = ref({
+  name: '',
+  postal_code: '',
+  address: '',
+  city: ''
+})
+
 // 配送先情報
-const shippingAddress = {
- name: '山田 太郎',
- postal_code: '150-0001',
- address: '東京都渋谷区神宮前1-1-1',
- city: '渋谷区'
+const shippingAddress = ref({
+ name: '',
+ postal_code: '',
+ address: '',
+ city: ''
+})
+
+// バリデーション関数を追加
+const validateShippingAddress = () => {
+  let isValid = true
+  errors.value = {
+    name: '',
+    postal_code: '',
+    address: '',
+    city: ''
+  }
+
+  if (!shippingAddress.value.name) {
+    errors.value.name = 'お名前を入力してください'
+    isValid = false
+  }
+
+  if (!shippingAddress.value.postal_code) {
+    errors.value.postal_code = '郵便番号を入力してください'
+    isValid = false
+  } else if (!/^\d{3}-\d{4}$/.test(shippingAddress.value.postal_code)) {
+    errors.value.postal_code = '正しい郵便番号を入力してください（例：123-4567）'
+    isValid = false
+  }
+
+  if (!shippingAddress.value.address) {
+    errors.value.address = '住所を入力してください'
+    isValid = false
+  }
+
+  if (!shippingAddress.value.city) {
+    errors.value.city = '市区町村を入力してください'
+    isValid = false
+  }
+
+  return isValid
 }
+
 
 const cartItems = computed((): CartItem[] => cartStore.items)
 const subtotal = computed(() => 
- cartItems.value.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+ cartItems.value.reduce((sum, item) => sum + (2000 * item.quantity), 0)
 )
 const total = computed(() => subtotal.value + 500)
 
@@ -151,6 +235,10 @@ const handlePaymentError = (error: string) => {
 }
 
 const handleSubmit = async () => {
+  if (!validateShippingAddress()) {
+    return
+  }
+
  isProcessing.value = true
  try {
    const { client_secret } = await cartStore.initCheckout()
