@@ -12,57 +12,6 @@
         <p class="text-sm text-gray-600">注文番号：{{ orderId }}</p>
       </div>
 
-      <!-- お届け予定 -->
-      <div class="bg-white rounded-lg shadow p-4 mt-4">
-        <div class="flex items-center space-x-2 mb-4">
-          <Box class="w-5 h-5 text-gray-600" />
-          <h2 class="font-bold">お届け予定</h2>
-        </div>
-        <p class="text-sm text-gray-600">
-          発送まで2〜3営業日程度お時間をいただきます。<br />
-          発送後、メールにてお知らせいたします。
-        </p>
-      </div>
-
-      <!-- 注文内容 -->
-      <div class="bg-white rounded-lg shadow p-4 mt-4">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold">注文内容</h2>
-          <button class="flex items-center text-indigo-600 text-sm">
-            <span class="mr-1">詳細を見る</span>
-            <ChevronRight class="w-4 h-4" />
-          </button>
-        </div>
-        <div class="space-y-4">
-          <div>
-            <p class="text-sm text-gray-600">商品の小計</p>
-            <p class="font-bold">¥6,000</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600">配送料</p>
-            <p class="font-bold">¥500</p>
-          </div>
-          <div class="pt-4 border-t">
-            <p class="text-sm text-gray-600">合計（税込）</p>
-            <p class="font-bold">¥6,500</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- アクションボタン -->
-      <div class="space-y-4 mt-6">
-        <button class="w-full bg-indigo-600 text-white py-4 rounded-lg font-bold flex items-center justify-center">
-          <ShoppingBag class="w-5 h-5 mr-2" />
-          注文履歴を確認
-        </button>
-        
-        <button class="w-full bg-white text-gray-900 py-4 rounded-lg font-bold border border-gray-200 flex items-center justify-center">
-          <HomeIcon class="w-5 h-5 mr-2" />
-          ホームに戻る
-        </button>
-      </div>
-    </main>
-
     <!-- Footer -->
     <MobileFooter />
   </div>
