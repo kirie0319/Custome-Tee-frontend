@@ -59,10 +59,6 @@
       <p>上記の場合、商品到着後7日以内にメールにてご連絡ください。</p>
     </div>
   </div>
-</template>
-
-<!-- PrivacyPolicy.vue -->
-<template>
   <div class="legal-container">
     <h1>プライバシーポリシー</h1>
 
