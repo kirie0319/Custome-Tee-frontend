@@ -10,11 +10,7 @@
     <main class="p-4">
       <!-- カートアイテム -->
       <div v-if="cartItems.length > 0" class="space-y-4 mb-6">
-        <div 
-          v-for="item in cartItems" 
-          :key="item.id" 
-          class="bg-white rounded-lg shadow p-4"
-        >
+        <div v-for="item in cartItems" :key="item.id" class="bg-white rounded-lg shadow p-4">
           <div class="flex space-x-4">
             <!-- 商品画像 -->
             <img
@@ -22,7 +18,7 @@
               :alt="item.design.prompt"
               class="w-24 h-24 bg-gray-100 rounded-md object-cover"
             />
-            
+
             <!-- 商品詳細 -->
             <div class="flex-1">
               <p class="text-sm text-gray-600">AI生成デザイン #{{ item.id }}</p>
@@ -39,10 +35,7 @@
                   <Edit class="w-4 h-4 mr-1" />
                   <span class="text-sm">編集</span>
                 </router-link>
-                <button
-                  @click="removeFromCart(item.id)"
-                  class="flex items-center text-red-600"
-                >
+                <button @click="removeFromCart(item.id)" class="flex items-center text-red-600">
                   <Trash2 class="w-4 h-4 mr-1" />
                   <span class="text-sm">削除</span>
                 </button>
@@ -83,17 +76,9 @@
       </div>
 
       <!-- カートが空の場合 -->
-      <div 
-        v-else 
-        class="bg-white rounded-lg shadow p-8 text-center"
-      >
+      <div v-else class="bg-white rounded-lg shadow p-8 text-center">
         <p class="text-gray-600 mb-4">カートに商品がありません</p>
-        <router-link
-          to="/"
-          class="text-indigo-600 font-medium"
-        >
-          デザインを作成する
-        </router-link>
+        <router-link to="/" class="text-indigo-600 font-medium"> デザインを作成する </router-link>
       </div>
     </main>
 
@@ -108,7 +93,7 @@ import { useRouter } from 'vue-router'
 import { Edit, Trash2 } from 'lucide-vue-next'
 import MobileFooter from '@/components/MobileFooter.vue'
 import { useCartStore } from '@/stores/cart'
-import type { CartItem } from '@/types/cart'  // 型をインポート
+import type { CartItem } from '@/types/cart' // 型をインポート
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -116,7 +101,7 @@ const isLoading = ref(false)
 
 const cartItems = computed((): CartItem[] => cartStore.items)
 const totalAmount = computed(() => {
-  return cartItems.value.reduce((total, item) => total + (2000 * item.quantity), 0)
+  return cartItems.value.reduce((total, item) => total + 3000 * item.quantity, 0)
 })
 
 const removeFromCart = async (itemId: number) => {

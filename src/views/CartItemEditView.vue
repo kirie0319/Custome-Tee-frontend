@@ -89,11 +89,13 @@
                     @click="updateColor(color)"
                     :class="[
                       'w-12 h-12 rounded-full border-2 transition-all',
-                      editedItem.color === color ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-300'
+                      editedItem.color === color
+                        ? 'border-blue-500 ring-2 ring-blue-200'
+                        : 'border-gray-300',
                     ]"
                     :style="{
                       backgroundColor: color.toLowerCase(),
-                      color: color === 'White' ? 'black' : 'white'
+                      color: color === 'White' ? 'black' : 'white',
                     }"
                   ></button>
                 </div>
@@ -105,7 +107,7 @@
           <div class="bg-white rounded-lg shadow p-6">
             <div class="flex justify-between items-center">
               <span class="text-lg font-medium">{{ $t('cart_edit.price') }}:</span>
-              <span class="text-2xl font-bold">¥{{ 2000 * editedItem.quantity }}</span>
+              <span class="text-2xl font-bold">¥{{ 3000 * editedItem.quantity }}</span>
             </div>
           </div>
 
@@ -152,7 +154,7 @@ const designConfig = ref<DesignConfig>({
   color: 'white',
   position: { x: 50, y: 50 },
   scale: 1,
-  rotation: 0
+  rotation: 0,
 })
 const isSaving = ref(false)
 
@@ -161,7 +163,7 @@ const updateColor = async (color: string) => {
   editedItem.value.color = color
   designConfig.value = {
     ...designConfig.value,
-    color: color.toLowerCase()
+    color: color.toLowerCase(),
   }
   componentKey.value++
 }
@@ -174,13 +176,13 @@ const fetchCartItem = async () => {
     editedItem.value = {
       size: data.size,
       quantity: data.quantity,
-      color: data.color
+      color: data.color,
     }
     designConfig.value = {
       color: data.color.toLowerCase(),
       position: data.design_config?.position || { x: 50, y: 50 },
       scale: Number(data.design_config?.scale || 1),
-      rotation: Number(data.design_config?.rotation || 0)
+      rotation: Number(data.design_config?.rotation || 0),
     }
     componentKey.value++
   } catch (error) {
@@ -199,12 +201,12 @@ const fetchCartItem = async () => {
 
 const updateDesignConfig = (config: DesignConfig) => {
   if (!editedItem.value) return
-  
+
   designConfig.value = {
     color: editedItem.value.color.toLowerCase(),
     position: config.position,
     scale: config.scale,
-    rotation: config.rotation
+    rotation: config.rotation,
   }
   componentKey.value++
 }
@@ -218,7 +220,7 @@ const saveChanges = async () => {
       size: editedItem.value.size,
       quantity: editedItem.value.quantity,
       color: editedItem.value.color,
-      design_config: designConfig.value
+      design_config: designConfig.value,
     })
     router.push('/cart')
   } catch (error) {

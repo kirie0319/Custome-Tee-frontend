@@ -4,10 +4,7 @@
     <!-- ヘッダー -->
     <header class="bg-white p-4 shadow-sm sticky top-0 z-10">
       <div class="flex items-center">
-        <button 
-          @click="router.push('/')" 
-          class="p-2 -ml-2"
-        >
+        <button @click="router.push('/')" class="p-2 -ml-2">
           <ChevronLeft class="h-6 w-6" />
         </button>
         <h1 class="text-xl font-bold flex-1 text-center">デザインを作成</h1>
@@ -18,7 +15,7 @@
     <!-- メインコンテンツ -->
     <main class="p-4 space-y-6">
       <!-- エラーメッセージ -->
-      <div 
+      <div
         v-if="error"
         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
       >
@@ -30,7 +27,7 @@
         <form @submit.prevent="generateDesign" class="space-y-6">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              デザインの説明
+              デザインの説明（英語でお願いします）
             </label>
             <textarea
               v-model="prompt"
@@ -72,9 +69,7 @@
           <div class="space-y-6">
             <!-- サイズ選択 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                サイズ
-              </label>
+              <label class="block text-sm font-medium text-gray-700 mb-2"> サイズ </label>
               <div class="grid grid-cols-4 gap-2">
                 <button
                   v-for="s in ['S', 'M', 'L', 'XL']"
@@ -82,9 +77,9 @@
                   @click="size = s"
                   class="py-2 rounded-md border transition-colors"
                   :class="[
-                    size === s 
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-600' 
-                      : 'border-gray-300 hover:border-gray-400'
+                    size === s
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
+                      : 'border-gray-300 hover:border-gray-400',
                   ]"
                 >
                   {{ s }}
@@ -94,9 +89,7 @@
 
             <!-- カラー選択 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                カラー
-              </label>
+              <label class="block text-sm font-medium text-gray-700 mb-2"> カラー </label>
               <div class="flex gap-4">
                 <button
                   v-for="c in ['White', 'Black']"
@@ -104,13 +97,13 @@
                   @click="updateColor(c)"
                   class="w-12 h-12 rounded-full border-2 transition-all relative"
                   :class="[
-                    color === c 
-                      ? 'border-indigo-600 ring-2 ring-indigo-200' 
-                      : 'border-gray-300 hover:border-gray-400'
+                    color === c
+                      ? 'border-indigo-600 ring-2 ring-indigo-200'
+                      : 'border-gray-300 hover:border-gray-400',
                   ]"
                   :style="{ backgroundColor: c.toLowerCase() }"
                 >
-                  <Check 
+                  <Check
                     v-if="color === c"
                     class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6"
                     :class="c === 'White' ? 'text-gray-800' : 'text-white'"
@@ -183,7 +176,7 @@ const designConfig = ref<DesignConfig>({
   color: 'white',
   position: { x: 50, y: 50 },
   scale: 1,
-  rotation: 0
+  rotation: 0,
 })
 
 const updateColor = (newColor: string) => {
@@ -223,11 +216,11 @@ const addToCart = async () => {
         color: designConfig.value.color,
         position: {
           x: designConfig.value.position.x,
-          y: designConfig.value.position.y
+          y: designConfig.value.position.y,
         },
         scale: designConfig.value.scale,
-        rotation: designConfig.value.rotation
-      }
+        rotation: designConfig.value.rotation,
+      },
     })
     await cartStore.fetchCartItems()
     router.push('/cart')

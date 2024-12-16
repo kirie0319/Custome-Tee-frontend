@@ -9,43 +9,43 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('@/views/RegisterView.vue')
+      component: () => import('@/views/RegisterView.vue'),
     },
     {
       path: '/create-design',
       name: 'create-design',
-      component: () => import('@/views/CreateDesignView.vue')
+      component: () => import('@/views/CreateDesignView.vue'),
     },
     {
       path: '/cart',
       name: 'cart',
-      component: () => import('@/views/CartView.vue')
+      component: () => import('@/views/CartView.vue'),
     },
     {
       path: '/cart/edit/:id',
       name: 'cart-item-edit',
       component: () => import('@/views/CartItemEditView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/checkout',
       name: 'checkout',
-      component: () => import('@/views/CheckoutView.vue')
+      component: () => import('@/views/CheckoutView.vue'),
     },
     {
       path: '/order-complete/:orderId',
       name: 'order-complete',
-      component: () => import('@/views/OrderCompleteView.vue')
+      component: () => import('@/views/OrderCompleteView.vue'),
     },
     {
       path: '/admin-login',
@@ -60,27 +60,31 @@ const router = createRouter({
         {
           path: '',
           name: 'admin-dashboard',
-          component: () => import('@/views/AdminDashboard.vue')
+          component: () => import('@/views/AdminDashboard.vue'),
         },
         {
           path: 'orders',
           name: 'admin-orders',
-          component: () => import('@/views/AdminOrders.vue')
+          component: () => import('@/views/AdminOrders.vue'),
         },
         {
           path: 'users',
           name: 'admin-users',
-          component: () => import('@/views/AdminUsers.vue')
+          component: () => import('@/views/AdminUsers.vue'),
         },
         {
           path: '/orders/:id',
           name: 'AdminOrderDetail',
-          component: () => import('@/views/AdminOrderDetail.vue')
-        }
-        
-      ]
-    }
-  ]
+          component: () => import('@/views/AdminOrderDetail.vue'),
+        },
+      ],
+    },
+    {
+      path: '/legal',
+      name: 'legal',
+      component: () => import('@/views/LegalView.vue'),
+    },
+  ],
 })
 
 export default router
