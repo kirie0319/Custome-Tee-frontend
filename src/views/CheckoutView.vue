@@ -104,7 +104,7 @@
               <p class="text-sm">数量: {{ item.quantity }}</p>
             </div>
           </div>
-          <p class="font-bold">¥{{ item.price * item.quantity }}</p>
+          <p class="font-bold">¥{{ 3000 * item.quantity }}</p>
         </div>
       </div>
 
