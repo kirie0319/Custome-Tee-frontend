@@ -44,7 +44,7 @@
 
             <!-- 価格 -->
             <div class="text-right">
-              <p class="font-bold">¥{{ 2000 * item.quantity }}</p>
+              <p class="font-bold">¥{{ 3000 * item.quantity }}</p>
             </div>
           </div>
         </div>

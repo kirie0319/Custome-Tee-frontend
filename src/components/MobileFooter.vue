@@ -24,14 +24,14 @@
       </router-link>
 
       <!-- My Page Button -->
-      <!-- <router-link 
-        to="/my-page" 
+      <router-link 
+        to="/legal" 
         class="flex flex-col items-center min-w-[48px] min-h-[48px] pt-2"
-        :class="{ 'text-indigo-600': $route.path.includes('my-page') }"
+        :class="{ 'text-indigo-600': $route.path.includes('legal') }"
       >
         <UserIcon class="h-6 w-6" />
-        <span class="text-xs mt-1">My Page</span>
-      </router-link> -->
+        <span class="text-xs mt-1">Legal</span>
+      </router-link>
 
       <!-- Menu Button -->
       <!-- <button 
