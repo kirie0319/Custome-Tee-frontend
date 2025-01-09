@@ -5,23 +5,22 @@
     <header class="bg-white p-4 shadow-sm">
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-4">
-          <h1 class="text-xl font-bold">{{ $t('home.title') }}</h1>
+          <h1 class="text-xl font-bold">Geneartweave</h1>
           <LanguageSelector />
         </div>
 
-        
         <div class="flex items-center space-x-4">
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
             <span class="text-gray-700">{{ authStore.user?.username }}</span>
-            <button 
+            <button
               @click="handleLogout"
               class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             >
               {{ $t('common.logout') }}
             </button>
           </div>
-          <router-link 
-            v-else 
+          <router-link
+            v-else
             to="/login"
             class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
           >
@@ -37,8 +36,8 @@
         <!-- デザイン作成セクション -->
         <div class="bg-indigo-600 text-white p-6 rounded-lg shadow-md text-center">
           <h2 class="text-xl font-bold mb-4">AIでオリジナルTシャツを作ろう</h2>
-          <router-link 
-            to="/create-design" 
+          <router-link
+            to="/create-design"
             class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold"
           >
             {{ $t('home.createDesignButton') }}
@@ -108,7 +107,7 @@
       <div v-else class="text-center py-12">
         <h2 class="text-3xl font-bold mb-4">{{ $t('home.welcome') }}</h2>
         <p class="text-xl text-gray-600 mb-8">{{ $t('home.subtitle') }}</p>
-        <router-link 
+        <router-link
           to="/login"
           class="bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-indigo-700"
         >
@@ -122,12 +121,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
-import { 
-  ShoppingCart,
-  Heart,
-  ShoppingBag,
-  TrendingUp
-} from 'lucide-vue-next'
+import { ShoppingCart, Heart, ShoppingBag, TrendingUp } from 'lucide-vue-next'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import MobileFooter from '@/components/MobileFooter.vue'
 
