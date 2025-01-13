@@ -61,3 +61,5 @@ backend/.env
 
 *.tsbuildinfo
 >>>>>>> bbc61ed (finish Admin frontend)
+
+.env
