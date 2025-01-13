@@ -26,9 +26,7 @@
       <div class="bg-white rounded-lg shadow p-6">
         <form @submit.prevent="generateDesign" class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              デザインの説明（英語でお願いします）
-            </label>
+            <label class="block text-sm font-medium text-gray-700 mb-2"> デザインの説明 </label>
             <textarea
               v-model="prompt"
               class="w-full h-32 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -159,6 +157,9 @@ import TShirtPreview from '@/components/TShirtPreview.vue'
 import MobileFooter from '@/components/MobileFooter.vue'
 import { useCartStore } from '@/stores/cart'
 import type { DesignConfig } from '@/types/cart'
+import axios from 'axios'
+
+const GOOGLE_TRANSLATE_API = import.meta.env.VITE_GOOGLE_TRANSLATE_API
 
 // ロジック部分（省略なし）
 const router = useRouter()
