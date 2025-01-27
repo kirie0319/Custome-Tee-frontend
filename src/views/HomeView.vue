@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex items-center space-x-4">
-          <LanguageSelector />
+          <!-- <LanguageSelector /> -->
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
             <button
               @click="handleLogout"
