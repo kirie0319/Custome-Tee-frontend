@@ -11,7 +11,6 @@
         <div class="flex items-center space-x-4">
           <LanguageSelector />
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
-            <span class="text-gray-700">{{ authStore.user?.username }}</span>
             <button
               @click="handleLogout"
               class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
@@ -51,7 +50,15 @@
               あなたのアイデアを形にし、魅力的なTシャツを一緒に生成しましょう！
             </p>
             <router-link
+              v-if="authStore.isAuthenticated"
               to="/create-design"
+              class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-indigo-700"
+            >
+             デザインを作成する
+            </router-link>
+            <router-link
+              v-else
+              to="/login"
               class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-indigo-700"
             >
              無料で始める
