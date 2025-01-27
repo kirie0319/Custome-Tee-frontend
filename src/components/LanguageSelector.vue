@@ -5,7 +5,7 @@
       @click="isOpen = !isOpen"
       class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
-      <span class="mr-1">{{ currentLanguageLabel }}</span>
+      <span class="mr-1"><img src="https://custome-tee-designs.s3.ap-northeast-1.amazonaws.com/designs/imges/language_translation.png" class="w-10 h-10" alt="language_translation_logo"></span>
       <ChevronDown class="h-4 w-4" />
     </button>
 
