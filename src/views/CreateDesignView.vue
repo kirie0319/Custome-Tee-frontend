@@ -41,10 +41,19 @@
             :disabled="isLoading"
             :class="{ 'opacity-50 cursor-not-allowed': isLoading }"
           >
-            <div class="flex items-center justify-center">
+            <div v-if="authStore.isAuthenticated" class="flex items-center justify-center">
               <Loader2 v-if="isLoading" class="w-5 h-5 animate-spin mr-2" />
               <span>{{ isLoading ? 'デザインを生成中...' : 'AIでデザインを生成' }}</span>
             </div>
+            <router-link
+              v-else
+              to="/login"
+              class="w-full bg-indigo-600 text-white py-4 rounded-lg font-bold hover:bg-indigo-700 transition-colors"
+            >
+              <div class="flex items-center justify-center">
+                <span>AIでデザインを生成</span>
+              </div>
+            </router-link>
           </button>
         </form>
       </div>
@@ -152,6 +161,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { ChevronLeft, Check, Loader2, Dot } from 'lucide-vue-next'
 import TShirtPreview from '@/components/TShirtPreview.vue'
 import MobileFooter from '@/components/MobileFooter.vue'
@@ -162,6 +172,7 @@ import axios from 'axios'
 const GOOGLE_TRANSLATE_API = import.meta.env.VITE_GOOGLE_TRANSLATE_API
 
 // ロジック部分（省略なし）
+const authStore = useAuthStore()
 const router = useRouter()
 const cartStore = useCartStore()
 
